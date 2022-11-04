@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="product">
+        <table width="100%">
+            <tr>
+                <td>
+                    <img src="/static/img/product_img/{{product_type}}/{{title}}.png">
+                </td>
+                <td>
+                    <h1>{{title}}</h1>
+                </td>
+            </tr>
+        </table>
+        <form action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <table>{{form}}</table>
+            <input type="submit" value="Отправить" class="btn btn-primary">
+        </form>
+    </div>
+{% endblock %}

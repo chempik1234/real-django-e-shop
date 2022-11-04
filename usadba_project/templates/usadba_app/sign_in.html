@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="card custom-form">
+    <form class="card-body" method="post">
+        {% csrf_token %}
+        {% for field in form %}
+        <div class="form-group">
+            <label class="col col-form-label">{{field.label}}</label>
+            <input type="{{field.type}}" name="{{field.name}}" class="form-control" required id="{{field.id_for_label}}"
+                   placeholder="Введите {{field.label}}">
+        </div>
+        {% for error in field.errors %}
+        <div class="alert alert-danger">{{ error }}</div>
+        {% endfor %}
+        {% endfor %}
+        <!--<table>{{form}}</table>-->
+        <input type="submit" value="Отправить" class="btn btn-primary">
+    </form>
+    </div>
+{% endblock %}

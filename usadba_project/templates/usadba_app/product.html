@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="product product-page-product">
+    <h1>{{title}}</h1>
+    <div class="wrapper container">
+        <img src="/static/img/{{img_dir}}/{{title}}.png">
+        <div>
+            <!------------------------------------------------------->
+            <h3 class="text-warning">Оценка: {% if rates == 0 %}ещё нет оценок{% else %}{{rate}}{% endif %}</h3>
+            {% if your_rate > 0 %}
+            <h4 class="text-warning">(Ваша оценка: {{your_rate}})</h4>
+            {% endif %}
+            <div>
+                <h3>Оценить:</h3>
+                <div class="rating-bar">
+                {% for i in '12345'|make_list %}
+                    <a href="/rate/{{product_type}}/{{id}}/{{i}}">
+                        <img class="star" src="{{general_images_dirs.star}}">
+                    </a>
+                {% endfor %}
+                </div>
+            </div>
+            <!------------------------------------------------------->
+            <h4 style="margin-top: 20px;">{{price}} ₽</h4>
+            <a href="/product/buy/{{product_type}}/{{title}}" class="btn btn-warning">Купить</a>
+        </div>
+    </div>
+    <h2>Описание:</h2>
+    <p class="description">{{description}}</p>
+    <h2>Характеристики:</h2>
+    <table class="product-table">
+        {% for key, value in item %}
+        {% if value != "" and value != None %}
+        <tr>
+            <td style="color: gray;"><h4>{{key}}:</h4></td>
+            <td><h4>{{value}}</h4></td>
+        </tr>
+        {% endif %}
+        {% endfor %}
+    </table>
+    <a href="/product/add_opinion/{{product_type}}/{{id}}" class="btn btn-primary">Оставить отзыв</a>
+</div>
+{% if opinions != None %}
+<div>
+    {% for item in opinions %}
+    <div class="opinion">
+        <h2>{{item.0}}</h2>
+        {% if item.2 != '' and item.2 != None %}
+        <img class="opinion_img" src="/{{item.2}}" alt="no image">
+        {% else %}
+        <h3>Нет фото</h3>
+        {% endif %}
+        {% if item.3 > 0 %}
+        <div class="rating-bar">
+        {% for i in 0|range:item.3 %}
+            <a>
+                <img class="star" src="{{general_images_dirs.star}}">
+            </a>
+        {% endfor %}
+        {% for i in item.3|range:5 %}
+            <a>
+                <img class="star" src="{{general_images_dirs.star_gray}}">
+            </a>
+        {% endfor %}
+        </div>
+        {% endif %}
+        <p class="opinion-text">{{item.1}}</p>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+{% endblock %}

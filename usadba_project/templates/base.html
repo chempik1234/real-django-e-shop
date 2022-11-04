@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{{style}}"/>
+    <title>{{title}}</title>
+  </head>
+  <body>
+    <header>
+      <nav class="navbar navbar-dark" style="background-color: #00DD00;">
+        <a class="navbar-title" href="/"><h1>Магазин "Усадьба"</h1></a>
+        <a class="nav-btn" href="/about">О нас</a>
+        {% if user.is_authenticated %}
+          <a class="navbar-brand" href="/profile">{{ user.username }} ({{ user.first_name }} {{user.last_name}})</a>
+          <a class="nav-btn" href="/logout">Выйти</a>
+        {% else %}
+        <a>
+          <a class="nav-btn" href="/register">Зарегистрироваться</a>
+          <a class="nav-btn" href="/login">Войти</a>
+        </a>
+        {% endif %}
+      </nav>
+    </header>
+    {% if messages %}
+    <ul class="messages sticky-top">
+        {% for message in messages %}
+        <li{% if message.tags %} class="message {{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    <div class="wrapper top-bar">
+      <img class="main-logo" src="/static/img/logo.png">
+      <form action="/search" class="top-bar-inner align-self-center input-group">
+        <input type="text" name="q" class="form-control" placeholder="" aria-label="" aria-describedby="basic-addon1">
+        <div class="input-group-append">
+          <input type="submit" class="btn btn-success" value="Найти">
+        </div>
+      </form>
+      <div class="top-bar-inner vertical-div">
+        <div class="text-uppercase">корзина</div>
+        <a><img src="{{general_images_dirs.bucket}}" class="bucket"></a>
+      </div>
+    </div>
+    <h1 class="main-title">{{main_title}}</h1>
+    <main role="main" class="container wrapper">
+      <div class="left-bar">
+        <ul class="left-bar-inner">
+          <li><h2>Семена</h2></li>
+          {% for i, j in seed_categories.items %}
+          <li><a href="/product/{{j}}Seeds">{{i}}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% block content %}{% endblock %}
+    </main>
+    <footer class="main-footer footer_">
+      <table width="100%" class="footer-text text-150">
+        <thead class="footer-table-header"><tr><th>О нас</th></tr></thead>
+        <tbody>
+        <tr>
+          <th>Адрес</th>
+          <th>Обратная связь</th>
+        </tr>
+        <tr>
+          <td>
+            <p>респ. Башкортостан, г.Октябрьский, ул. Садовое Кольцо, д. 51/1</p>
+            <img class="address-map" src="http://static-maps.yandex.ru/1.x/?ll=53.468527,54.488768&z=18&l=sat,skl&pt=54.488970,53.467995,pm2gnm1">
+          </td>
+          <td><p>8-800-555-35-35</p><p>theresnoscam@yandex.ru</p></td>
+        </tr>
+        </tbody>
+      </table>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="card-deck">
+    {% for item in dictionary %}
+        <div class="card">
+            <div class="card-body">
+                <h2 class="name-in-product">{{item.title}}</h2>
+            </div>
+            <!--src="/static/img/{{img_dir}}/{{item.title}}.png"-->
+            <img class="card-img-top product-img" src="/static/img/product_img/{{item.product_type}}/{{item.title}}.png" alt="Card image cap">
+            <div class="card-body">
+                <!------------------------------------------------------->
+                {% if rates == 0 %}
+                <h3 class="text-warning">Оценка: ещё нет оценок</h3>
+                {% else %}
+                <div class="text-warning">
+                    <h3>Оценка: {{item.rating}}</h3>
+                    <div class="rating-bar">
+                    {% for i in 0|range:item.rating %}
+                        <a>
+                            <img class="star" src="{{general_images_dirs.star}}">
+                        </a>
+                    {% endfor %}
+                    {% for i in item.rating|range:5 %}
+                        <a>
+                            <img class="star" src="{{general_images_dirs.star_gray}}">
+                        </a>
+                    {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+                <!------------------------------------------------------->
+                <h2>{{item.price}} ₽.</h2>
+                <a href="/product/buy/{{item.product_type}}/{{item.title}}" class="btn btn-warning">Купить</a>
+                <a href="/product/{{item.product_type}}/{{item.title}}" class="btn btn-primary">Подробнее</a>
+            </div>
+        </div>
+    {% endfor %}
+    </div>
+{% endblock %}

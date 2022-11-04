@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="card custom-form">
+    <form class="card-body" action="" method="post">
+        {% csrf_token %}
+        {% for field in form %}
+        <!--{% if field.name != "remember_me" %}-->
+        <div class="form-group">
+            <label class="col col-form-label">{{field.label}}</label>
+            <input type="{{field.type}}" name="{{field.name}}" class="form-control" required id="{{field.id_for_label}}"
+                   placeholder="Введите {{field.label}}">
+        </div>
+        <!--{% else %}
+        <div class="form-check">
+            <input type="checkbox" name="{{field.name}}" class="form-check-input" id="{{field.id_for_label}}">
+            <label class="form-check-label">{{field.label}}</label>
+        </div>
+        {% endif %}-->
+        {% for error in field.errors %}
+        <div class="alert alert-danger">{{ error }}</div>
+        {% endfor %}
+        {% endfor %}
+        <input type="submit" value="Отправить" class="btn btn-primary">
+    </form>
+    </div>
+{% endblock %}

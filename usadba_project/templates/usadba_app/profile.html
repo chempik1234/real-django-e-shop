@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="card custom-form" style="width: 500px">
+        <div class="card-body">
+            <h1 class="font-weight-bold">{{username}}</h1>
+            {% for i, j in user_info %}
+            <div class="form-group">
+                <label>{{i}}:</label>
+                <div class="form-control">{{j}}</div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
