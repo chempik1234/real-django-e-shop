@@ -46,7 +46,7 @@ def x_or_y_if_a(a, x, y):
 # PULL
 def github_update_pythonanywhere(request):
     if request.method == 'POST':
-        repo = git.Repo('../../../')
+        repo = git.Repo('.', search_parent_directories=True)
         origin = repo.remotes.origin
         origin.pull()
         return 'Updated PythonAnywhere successfully', 200
