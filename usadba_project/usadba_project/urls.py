@@ -19,6 +19,7 @@ from usadba_app import views
 
 urlpatterns = [
     path('', views.landing),
+    path('update_server', views.webhook)
     path('search', views.search),
     path('categories', views.categories),
     path('profile', views.profile),
