@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect, HttpResponseNotFound
+from django.views.decorators.csrf import csrf_exempt
 from .models import *
 from .forms import *
 import git
@@ -44,11 +45,13 @@ def x_or_y_if_a(a, x, y):
 
 
 # PULL
+@csrf_exempt
 def github_update_pythonanywhere(request):
     if request.method == 'POST':
-        repo = git.Repo('.', search_parent_directories=True)
-        origin = repo.remotes.origin
-        origin.pull()
+        repo = git.Repo('./usadba_project')
+        _git = repo.git
+        _git.checkout('master')
+        _git.pull()
         return 'Updated PythonAnywhere successfully', 200
     else:
         return 'Wrong event type', 400
