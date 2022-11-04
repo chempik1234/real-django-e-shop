@@ -46,13 +46,12 @@ def x_or_y_if_a(a, x, y):
 # PULL
 def github_update_pythonanywhere(request):
     if request.method == 'POST':
-        repo = git.Repo('https://github.com/chempik1234/real-django-e-shop')
+        repo = git.Repo('../../../')
         origin = repo.remotes.origin
         origin.pull()
         return 'Updated PythonAnywhere successfully', 200
     else:
         return 'Wrong event type', 400
-
 
 
 @register.filter(name='range')
