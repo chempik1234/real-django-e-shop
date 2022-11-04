@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect, HttpResponseNotFound
 from .models import *
 from .forms import *
-#import git
+import git
 from django.db.models import Sum
 import os, requests, datetime
 from random import randint
@@ -44,14 +44,14 @@ def x_or_y_if_a(a, x, y):
 
 
 # PULL
-# def webhook(request):
-#     if request.method == 'POST':
-#         repo = git.Repo('path/to/git_repo')
-#         origin = repo.remotes.origin
-#         origin.pull()
-#         return 'Updated PythonAnywhere successfully', 200
-#     else:
-#         return 'Wrong event type', 400
+def githib_update_pythonanywhere(request):
+    if request.method == 'POST':
+        repo = git.Repo('/user/Imfighter160/files/home/Imfighter160')
+        origin = repo.remotes.origin
+        origin.pull()
+        return 'Updated PythonAnywhere successfully', 200
+    else:
+        return 'Wrong event type', 400
 
 
 
