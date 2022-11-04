@@ -19,7 +19,7 @@ from usadba_app import views
 
 urlpatterns = [
     path('', views.landing),
-    path('githib_update_pythonanywhere', views.github_update_pythonanywhere),
+    path('github_update_pythonanywhere', views.github_update_pythonanywhere),
     path('search', views.search),
     path('categories', views.categories),
     path('profile', views.profile),
