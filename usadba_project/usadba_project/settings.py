@@ -27,6 +27,7 @@ SECRET_KEY = 'django-insecure-^t^0o6gm)ho^h*e*_!x=n9grrk1xv-)_k#cx#18q&$b7hj0=ch
 DEBUG = True
 
 ALLOWED_HOSTS = ['imfighter160.pythonanywhere.com']
+SECURE_CROSS_ORIGIN_OPENER_POLICY = None
 
 
 # Application definition
