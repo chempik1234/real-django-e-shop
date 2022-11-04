@@ -44,9 +44,9 @@ def x_or_y_if_a(a, x, y):
 
 
 # PULL
-def githib_update_pythonanywhere(request):
+def github_update_pythonanywhere(request):
     if request.method == 'POST':
-        repo = git.Repo('/files/home/Imfighter160')
+        repo = git.Repo('https://github.com/chempik1234/real-django-e-shop')
         origin = repo.remotes.origin
         origin.pull()
         return 'Updated PythonAnywhere successfully', 200
