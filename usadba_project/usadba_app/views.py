@@ -46,7 +46,7 @@ def x_or_y_if_a(a, x, y):
 # PULL
 def githib_update_pythonanywhere(request):
     if request.method == 'POST':
-        repo = git.Repo('/user/Imfighter160/files/home/Imfighter160')
+        repo = git.Repo('/files/home/Imfighter160')
         origin = repo.remotes.origin
         origin.pull()
         return 'Updated PythonAnywhere successfully', 200
