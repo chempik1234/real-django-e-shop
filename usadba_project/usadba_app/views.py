@@ -48,7 +48,7 @@ def x_or_y_if_a(a, x, y):
 @csrf_exempt
 def github_update_pythonanywhere(request):
     if request.method == 'POST':
-        repo = git.Repo('./usadba_project')
+        repo = git.Repo('./real-django-e-shop/usadba_project')
         _git = repo.git
         _git.checkout('master')
         _git.pull()
