@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponseRedirect, HttpResponseNotFound
+from django.http import HttpResponseRedirect, HttpResponseNotFound, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from .models import *
 from .forms import *
@@ -52,9 +52,9 @@ def github_update_pythonanywhere(request):
         _git = repo.git
         _git.checkout('master')
         _git.pull()
-        return 'Updated PythonAnywhere successfully', 200
+        return HttpResponse('pulled_success')
     else:
-        return 'Wrong event type', 400
+        return HttpResponse('get_request', status=400)
 
 
 @register.filter(name='range')
