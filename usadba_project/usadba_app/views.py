@@ -19,7 +19,7 @@ SEED_CATEGORIES = {'Помидоры': 'Tomato',
                    'Огурцы': 'Cucumber',
                    'Морковь': 'Carrot',
                    'Капуста': 'Cabbage'}
-URL_STYLE = os.path.join('/static', 'css/style.css')
+URL_STYLE = os.path.join('../static', 'css/style.css')
 # STATIC_IMG_GENERAL = '/static/img/general/'
 # GENERAL_IMAGES_DIRS = {'bucket': STATIC_IMG_GENERAL + 'bucket.png',
 #                        'star': STATIC_IMG_GENERAL + 'star.png',
