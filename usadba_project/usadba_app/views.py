@@ -88,11 +88,11 @@ def search(request):
             else:
                 your_rate = 0
             items.append({'title': item.title,
-                      'price': item.price,
-                      'rating': get_rating(table, item.id),
-                      'your_rate': your_rate,
-                      'id': item.id,
-                      'product_type': TABLE_TO_STRING[table]})
+                          'price': item.price,
+                          'rating': get_rating(table, item.id),
+                          'your_rate': your_rate,
+                          'id': item.id,
+                          'product_type': TABLE_TO_STRING[table]})
     data_context["dictionary"] = items
     data_context["seed_categories"] = SEED_CATEGORIES
     return render(request, 'usadba_app/list.html', context=data_context)
@@ -118,11 +118,11 @@ def product_list(request, product_type):
     table = types[product_type][1]
     current_user = request.user
     for item in table.objects.all():
-        your_rate = Rates.objects.filter(user_id=current_user,pr_table=item._meta.db_table,pr_id=item.id)
-        if your_rate.exists():
-            your_rate = your_rate.first().rate
-        else:
-            your_rate = 0
+        your_rate = 0
+        if current_user:
+            your_rate = Rates.objects.filter(user_id=current_user,pr_table=item._meta.db_table,pr_id=item.id)
+            if your_rate.exists():
+                your_rate = your_rate.first().rate
         d.append({'title': item.title,
                   'price': item.price,
                   'rating': get_rating(table, item.id),
@@ -183,7 +183,7 @@ def product(request, product_type, pr_id):
     data_context["description"] = item.description
     data_context["rate"] = get_rating(item_model, item.id)
     data_context["img_dir"] = '/product_img/' + product_type
-    data_context["title"] = item.title
+    data_context["title"] = title
     data_context["id"] = item.id
     data_context["opinions"] = opinions
     data_context["your_rate"] = your_rate
