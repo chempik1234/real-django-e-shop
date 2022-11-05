@@ -1,0 +1,4 @@
+django
+gitpython
+requests
+pillow
