@@ -50,7 +50,7 @@ def github_update_pythonanywhere(request):
     if request.method == 'POST':
         repo = git.Repo('./real-django-e-shop/usadba_project', search_parent_directories=True)
         _git = repo.git
-        #_git.checkout('master')
+        _git.checkout('master')
         _git.pull()
         return HttpResponse('pulled_success')
     else:
