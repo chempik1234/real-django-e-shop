@@ -2,3 +2,4 @@ django
 gitpython
 requests
 pillow
+Pillow
