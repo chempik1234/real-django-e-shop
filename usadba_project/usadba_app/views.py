@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect, HttpResponseNotFound, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.core.files import File
+import urllib.request
 from .models import *
 from .forms import *
 import git
@@ -17,22 +19,19 @@ SEED_CATEGORIES = {'Помидоры': 'Tomato',
                    'Огурцы': 'Cucumber',
                    'Морковь': 'Carrot',
                    'Капуста': 'Cabbage'}
-STRING_TO_TABLE = {"TomatoSeeds": TomatoSeeds}
-TABLE_TO_STRING = {}
-for i, j in STRING_TO_TABLE.items():
-    TABLE_TO_STRING[j] = i
 URL_STYLE = os.path.join('/static', 'css/style.css')
-STATIC_IMG_GENERAL = '/static/img/general/'
-GENERAL_IMAGES_DIRS = {'bucket': STATIC_IMG_GENERAL + 'bucket.png',
-                       'star': STATIC_IMG_GENERAL + 'star.png',
-                       'star_gray': STATIC_IMG_GENERAL + 'star_gray.png',
-                       'map_icon': STATIC_IMG_GENERAL + 'map_icon.png',
-                       'seeds': STATIC_IMG_GENERAL + 'seeds.png',
-                       'percent': STATIC_IMG_GENERAL + 'percent.png'}
-DEFAULT_CONTEXT = {"style": URL_STYLE,
-                   "seed_categories": SEED_CATEGORIES,
-                   "general_images_dirs": GENERAL_IMAGES_DIRS}
-PRODUCT_TABLES = [TomatoSeeds]
+# STATIC_IMG_GENERAL = '/static/img/general/'
+# GENERAL_IMAGES_DIRS = {'bucket': STATIC_IMG_GENERAL + 'bucket.png',
+#                        'star': STATIC_IMG_GENERAL + 'star.png',
+#                        'star_gray': STATIC_IMG_GENERAL + 'star_gray.png',
+#                        'map_icon': STATIC_IMG_GENERAL + 'map_icon.png',
+#                        'seeds': STATIC_IMG_GENERAL + 'seeds.png',
+#                        'percent': STATIC_IMG_GENERAL + 'percent.png'}
+DEFAULT_CONTEXT = {
+    # "style": URL_STYLE,
+    "seed_categories": SEED_CATEGORIES,
+    # "general_images_dirs": GENERAL_IMAGES_DIRS
+}
 
 
 def x_or_y_if_a(a, x, y):
@@ -42,6 +41,16 @@ def x_or_y_if_a(a, x, y):
         return x
     else:
         return y
+
+
+def get_rating(model_, id):
+    rates = Rates.objects.filter(pr_table=model_._meta.db_table,pr_id=id)
+    res, c = rates.aggregate(Sum('rate')), 0
+    if res["rate__sum"]:
+        c = res["rate__sum"]
+    else:
+        c = 0
+    return round(c / max(len(rates), 1), 1)
 
 
 # PULL
@@ -62,6 +71,7 @@ def filter_range(start, end):
     return range(int(start), int(end))
 
 
+# Views
 def search(request):
     q = request.GET.get('q', '')
     data_context = DEFAULT_CONTEXT.copy()
@@ -102,16 +112,6 @@ def categories(request):
     return render(request, 'usadba_app/categories.html', context=data)
 
 
-def get_rating(model_, id):
-    rates = Rates.objects.filter(pr_table=model_._meta.db_table,pr_id=id)
-    res, c = rates.aggregate(Sum('rate')), 0
-    if res["rate__sum"]:
-        c = res["rate__sum"]
-    else:
-        c = 0
-    return round(c / max(len(rates), 1), 1)
-
-
 def product_list(request, product_type):
     d = []
     types = {'TomatoSeeds': ('Семена помидоров', TomatoSeeds)}
@@ -128,7 +128,8 @@ def product_list(request, product_type):
                   'rating': get_rating(table, item.id),
                   'your_rate': your_rate,
                   'id': item.id,
-                  'product_type': product_type})
+                  'product_type': product_type,
+                  'image_url': item.image.url})
     data_context = DEFAULT_CONTEXT.copy()
     data_context["title"] = types[product_type][0]
     data_context["main_title"] = types[product_type][0]
@@ -138,10 +139,11 @@ def product_list(request, product_type):
     return render(request, 'usadba_app/list.html', context=data_context)
 
 
-def product(request, product_type, title):
+def product(request, product_type, pr_id):
     tables = {'TomatoSeeds': TomatoSeeds}
     item_model = tables[product_type]
-    item = item_model.objects.get(title=title)
+    item = item_model.objects.get(id=pr_id)
+    title = item.title
     d = {}
     if "Seeds" in product_type:
         d["Категория"] = item.category.name
@@ -156,16 +158,19 @@ def product(request, product_type, title):
     opinions_db = Opinion.objects.filter(pr_table=product_type, pr_id=item.id)
     opinions = []
     for i in opinions_db:
-        some_user = User.objects.get(id=i.user_id)
+        some_user = i.user_id
         some_rate = Rates.objects.filter(user_id=some_user,pr_table=item_model._meta.db_table,pr_id=item.id)
         if some_rate.exists():
             some_rate = some_rate.first().rate
         else:
             some_rate = 0
         opinions.append([some_user.username, i.text, i.image, some_rate])
+    current_user = request.user
     if not opinions:
         opinions = None
-    current_user = request.user
+    your_op = False
+    if Opinion.objects.filter(pr_table=product_type, pr_id=item.id, user_id=current_user).exists():
+        your_op = True
     your_rate = Rates.objects.filter(user_id=current_user,pr_table=item._meta.db_table,pr_id=item.id)
     if your_rate.exists():
         your_rate = your_rate.first().rate
@@ -182,6 +187,8 @@ def product(request, product_type, title):
     data_context["id"] = item.id
     data_context["opinions"] = opinions
     data_context["your_rate"] = your_rate
+    data_context["img_url"] = item.image.url
+    data_context["have_opinion"] = your_op
     return render(request, 'usadba_app/product.html', context=data_context)
 
 
@@ -235,7 +242,7 @@ def add_opinion(request, pr_table, pr_id):
         if post.is_valid():
             text, file = post.cleaned_data.get('text'), post.cleaned_data.get('file')
             op = Opinion()
-            op.user_id = current_user.id
+            op.user_id = current_user
             op.text = text
             op.pr_table = pr_table
             op.pr_id = pr_id
@@ -246,11 +253,26 @@ def add_opinion(request, pr_table, pr_id):
         return HttpResponseRedirect(f'/product/{pr_table}/{pr_title}')
     form_ = OpinionForm()
     data_context = DEFAULT_CONTEXT.copy()
-    data_context["title"] = pr_title
-    data_context["main_title"] = pr_title
+    data_context["item_title"] = pr_title
+    data_context["main_title"] = "Оставить отзыв на " + pr_title
+    data_context["title"] = data_context["main_title"]
     data_context["product_type"] = pr_table
     data_context["form"] = form_
+    data_context["img_url"] = described_item.image.url
     return render(request, 'usadba_app/opinion.html', context=data_context)
+
+
+@login_required(login_url='/login')
+def del_opinion(request, pr_table, pr_id):
+    if request.method == 'POST':
+        opinion = Opinion.objects.filter(pr_table=pr_table,pr_id=pr_id,user_id=request.user)
+        if opinion.exists():
+            opinion.delete()
+            return HttpResponseRedirect('/product/{0}/{1}'.format(pr_table, pr_id))
+        else:
+            return HttpResponse('YOUR (!) opinion does not exist', status=400)
+    else:
+        return HttpResponse('required_post', status=400)
 
 
 @login_required(login_url='/login')

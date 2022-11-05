@@ -1,9 +1,10 @@
 {% extends "base.html" %}
+{% load static %}
 {% block content %}
 <div class="product product-page-product">
     <h1>{{title}}</h1>
     <div class="wrapper container">
-        <img src="/static/img/{{img_dir}}/{{title}}.png">
+        <img src="{{img_url}}">
         <div>
             <!------------------------------------------------------->
             <h3 class="text-warning">Оценка: {% if rates == 0 %}ещё нет оценок{% else %}{{rate}}{% endif %}</h3>
@@ -15,7 +16,7 @@
                 <div class="rating-bar">
                 {% for i in '12345'|make_list %}
                     <a href="/rate/{{product_type}}/{{id}}/{{i}}">
-                        <img class="star" src="{{general_images_dirs.star}}">
+                        <img class="star" src="{% static 'img/general/star.png' %}">
                     </a>
                 {% endfor %}
                 </div>
@@ -38,7 +39,14 @@
         {% endif %}
         {% endfor %}
     </table>
+    {% if have_opinion %}
+    <form method="post" action="/product/del_opinion/{{product_type}}/{{id}}">
+        {% csrf_token %}
+        <input type="submit" class="btn btn-danger" value="Убрать отзыв">
+    </form>
+    {% else %}
     <a href="/product/add_opinion/{{product_type}}/{{id}}" class="btn btn-primary">Оставить отзыв</a>
+    {% endif %}
 </div>
 {% if opinions != None %}
 <div>
@@ -46,7 +54,7 @@
     <div class="opinion">
         <h2>{{item.0}}</h2>
         {% if item.2 != '' and item.2 != None %}
-        <img class="opinion_img" src="/{{item.2}}" alt="no image">
+        <img class="opinion_img" src="{{item.2.url}}" alt="Нет фото">
         {% else %}
         <h3>Нет фото</h3>
         {% endif %}
@@ -54,12 +62,12 @@
         <div class="rating-bar">
         {% for i in 0|range:item.3 %}
             <a>
-                <img class="star" src="{{general_images_dirs.star}}">
+                <img class="star" src="{% static 'img/general/star.png' %}">
             </a>
         {% endfor %}
         {% for i in item.3|range:5 %}
             <a>
-                <img class="star" src="{{general_images_dirs.star_gray}}">
+                <img class="star" src="{% static 'img/general/star_gray.png' %}">
             </a>
         {% endfor %}
         </div>

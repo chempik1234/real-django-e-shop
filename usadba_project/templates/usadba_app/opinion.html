@@ -1,20 +1,24 @@
 {% extends "base.html" %}
+{% load static %}
 {% block content %}
-    <div class="product">
-        <table width="100%">
-            <tr>
-                <td>
-                    <img src="/static/img/product_img/{{product_type}}/{{title}}.png">
-                </td>
-                <td>
-                    <h1>{{title}}</h1>
-                </td>
-            </tr>
-        </table>
-        <form action="" method="post" enctype="multipart/form-data">
+    <div class="card custom-form">
+        <img class="card-img-top" src="{{img_url}}">
+        <form class="card-body" method="post" enctype="multipart/form-data">
+            <h1>{{item_title}}</h1>
             {% csrf_token %}
-            <table>{{form}}</table>
-            <input type="submit" value="Отправить" class="btn btn-primary">
+            <div class="form-group">
+                <label class="col col-form-label">Текст отзыва:</label>
+                <input type="text" name="text" class="form-control" required id="id_text" placeholder="Введите текст">
+            </div>
+            <div class="form-group">
+                <label class="col col-form-label">Текст отзыва:</label>
+                <input type="file" name="file" class="form-control-file" required id="id_file" placeholder="Выбрать файл">
+            </div>
+            {% for error in field.errors %}
+            <div class="alert alert-danger">{{ error }}</div>
+            {% endfor %}
+            <!--<table>{{form}}</table>-->
+            <input type="submit" value="Отправить отзыв" class="btn btn-primary">
         </form>
     </div>
 {% endblock %}

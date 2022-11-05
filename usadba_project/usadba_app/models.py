@@ -6,18 +6,18 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 # Create your models here.
 
 
-class Order(models.Model):
-    user_id = models.IntegerField(unique=True)
-
-
-class OrderAndProduct(models.Model):
-    order_id = models.IntegerField
+# class Cart(models.Model):
+#     user_id = models.IntegerField(unique=True)
+#
+#
+# class CartAndProduct(models.Model):
+#     order_id = models.IntegerField
 
 
 class Opinion(models.Model):
-    user_id = models.IntegerField(null=True,)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     text = models.CharField(null=True,max_length=1200)
-    image = models.ImageField(null=True, upload_to=os.path.join(os.curdir, './static/img/opinion'))
+    image = models.ImageField(null=True, blank=True, upload_to='opinion')
     pr_table = models.CharField(null=True,max_length=255)  # tomato_seeds
     pr_id = models.IntegerField(null=True)
 
@@ -90,9 +90,17 @@ class GroundType(models.Model):
 
 
 class TomatoSeeds(Product, SimpleSeeds):
-    image = models.ImageField(null=True, upload_to=os.path.join(os.curdir, '../static/img/product_img/tomato'))
+    image = models.ImageField(blank=True, upload_to='product_img/TomatoSeeds', null=True)
     type_of_plant = models.ForeignKey(TomatoTypeOfPlant, on_delete=models.CASCADE)
     ground_growing_conditions = models.ForeignKey(GroundType, on_delete=models.CASCADE)
 
     class Meta:
         db_table = "tomato_seeds"
+
+
+# VARIABLES
+PRODUCT_TABLES = [TomatoSeeds]
+STRING_TO_TABLE = {"TomatoSeeds": TomatoSeeds}
+TABLE_TO_STRING = {}
+for i, j in STRING_TO_TABLE.items():
+    TABLE_TO_STRING[j] = i

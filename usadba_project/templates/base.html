@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -8,7 +10,7 @@
       crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="{{style}}"/>
+    <link rel="stylesheet" type="text/css" href="{%static 'css/style.css'%}"/>
     <title>{{title}}</title>
   </head>
   <body>
@@ -42,10 +44,12 @@
           <input type="submit" class="btn btn-success" value="Найти">
         </div>
       </form>
+      {% with total_items=cart|length total_price=cart.get_total_price %}
       <div class="top-bar-inner vertical-div">
-        <div class="text-uppercase">корзина</div>
-        <a><img src="{{general_images_dirs.bucket}}" class="bucket"></a>
+        <div class="text-uppercase">корзина<span class="badge badge-primary">{{total_items}}</span></div>
+        <a><img src="{% static 'img/general/bucket.png' %}" class="bucket"></a>
       </div>
+      {% endwith %}
     </div>
     <h1 class="main-title">{{main_title}}</h1>
     <main role="main" class="container wrapper">

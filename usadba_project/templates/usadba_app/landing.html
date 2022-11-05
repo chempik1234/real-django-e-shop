@@ -10,7 +10,7 @@
       crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="{{style}}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}"/>
     <title>{{title}}</title>
   </head>
   <body>
@@ -54,20 +54,20 @@
       <h1 class="w-100 horizontal-center">Почему мы?</h1>
       <div class="row-of-div">
         <div class="landing-card">
-          <img src="{{general_images_dirs.percent}}" class="landing-image gradient-1 shadow">
+          <img src="{%static 'img/general/percent.png'%}" class="landing-image gradient-1 shadow">
           <p class="landing-card-p">Низкие цены</p>
         </div>
         <div class="landing-card">
-          <img src="{{general_images_dirs.percent}}" class="landing-image gradient-1 shadow">
+          <img src="{%static 'img/general/percent.png'%}" class="landing-image gradient-1 shadow">
           <p class="landing-card-p">Низкие цены</p>
         </div>
         <div class="landing-card">
-          <img src="{{general_images_dirs.percent}}" class="landing-image gradient-1 shadow">
+          <img src="{%static 'img/general/percent.png'%}" class="landing-image gradient-1 shadow">
           <p class="landing-card-p">Низкие цены</p>
         </div>
       </div>
       <div class="media">
-        <img class="d-flex mr-3 icon" src="{{general_images_dirs.map_icon}}" alt="Generic placeholder image">
+        <img class="d-flex mr-3 icon" src="{%static 'img/general/map_icon.png'%}" alt="Map icon">
         <div class="media-body">
           <h5 class="mt-0"><strong>Адрес:</strong></h5>
           <p>респ. Башкортостан, г.Октябрьский, ул. Садовое Кольцо, д. 51/1</p>
