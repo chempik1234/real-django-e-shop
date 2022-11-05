@@ -249,7 +249,7 @@ def add_opinion(request, pr_table, pr_id):
                 op.image = file
             op.save()
             print('saved')
-        return HttpResponseRedirect(f'/product/{pr_table}/{pr_title}')
+        return HttpResponseRedirect(f'/product/{pr_table}/{pr_id}')
     form_ = OpinionForm()
     data_context = DEFAULT_CONTEXT.copy()
     data_context["item_title"] = pr_title
