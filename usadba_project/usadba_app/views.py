@@ -119,7 +119,7 @@ def product_list(request, product_type):
     current_user = request.user
     for item in table.objects.all():
         your_rate = 0
-        if current_user:
+        if current_user.is_authenticated:
             your_rate = Rates.objects.filter(user_id=current_user,pr_table=item._meta.db_table,pr_id=item.id)
             if your_rate.exists():
                 your_rate = your_rate.first().rate
@@ -168,14 +168,13 @@ def product(request, product_type, pr_id):
     current_user = request.user
     if not opinions:
         opinions = None
-    your_op = False
-    if Opinion.objects.filter(pr_table=product_type, pr_id=item.id, user_id=current_user).exists():
-        your_op = True
-    your_rate = Rates.objects.filter(user_id=current_user,pr_table=item._meta.db_table,pr_id=item.id)
-    if your_rate.exists():
-        your_rate = your_rate.first().rate
-    else:
-        your_rate = 0
+    your_op, your_rate = False, 0
+    if current_user.is_authenticated:
+        if Opinion.objects.filter(pr_table=product_type, pr_id=item.id, user_id=current_user).exists():
+            your_op = True
+        your_rate = Rates.objects.filter(user_id=current_user,pr_table=item._meta.db_table,pr_id=item.id)
+        if your_rate.exists():
+            your_rate = your_rate.first().rate
     data_context = DEFAULT_CONTEXT.copy()
     data_context["item"] = d.items()
     data_context["product_type"] = product_type
