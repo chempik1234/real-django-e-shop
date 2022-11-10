@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from usadba_app.views import *
-from git_pull import github_update_pythonanywhere
+from git_pull.views import *
 from usadba_project import settings
 from django.conf.urls.static import static
 
