@@ -8,6 +8,8 @@ from .forms import *
 import git
 from django.db.models import Sum
 import os, requests, datetime
+from os import listdir
+from os.path import isfile, join, basename
 from random import randint
 from django.contrib.auth import logout, login
 from django.contrib.auth.models import User
@@ -19,7 +21,8 @@ SEED_CATEGORIES = {'Помидоры': 'Tomato',
                    'Огурцы': 'Cucumber',
                    'Морковь': 'Carrot',
                    'Капуста': 'Cabbage'}
-URL_STYLE = os.path.join('../static', 'css/style.css')
+URL_STYLE_PATH = os.path.join('./static', 'css')
+STYLE_FILES = [basename(i) for i in listdir(URL_STYLE_PATH) if isfile(join(URL_STYLE_PATH, i))]
 # STATIC_IMG_GENERAL = '/static/img/general/'
 # GENERAL_IMAGES_DIRS = {'bucket': STATIC_IMG_GENERAL + 'bucket.png',
 #                        'star': STATIC_IMG_GENERAL + 'star.png',
@@ -28,7 +31,7 @@ URL_STYLE = os.path.join('../static', 'css/style.css')
 #                        'seeds': STATIC_IMG_GENERAL + 'seeds.png',
 #                        'percent': STATIC_IMG_GENERAL + 'percent.png'}
 DEFAULT_CONTEXT = {
-    # "style": URL_STYLE,
+    "styles": STYLE_FILES,
     "seed_categories": SEED_CATEGORIES,
     # "general_images_dirs": GENERAL_IMAGES_DIRS
 }

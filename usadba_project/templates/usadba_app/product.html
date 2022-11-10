@@ -13,13 +13,12 @@
             {% endif %}
             <div>
                 <h3>Оценить:</h3>
-                <div class="rating-bar">
+                <form method="post" action="/rate/{{product_type}}/{{id}}/" class="rating-bar">
                 {% for i in '12345'|make_list %}
-                    <a href="/rate/{{product_type}}/{{id}}/{{i}}">
-                        <img class="star" src="{% static 'img/general/star.png' %}">
-                    </a>
+	                <input type="radio" id="star-{{i}}" name="rating" value="{{i}}">
+	                <label for="star-{{i}}" title="Оценка «{{i}}»"></label>
                 {% endfor %}
-                </div>
+                </form>
             </div>
             <!------------------------------------------------------->
             <h4 style="margin-top: 20px;">{{price}} ₽</h4>

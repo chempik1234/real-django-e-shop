@@ -117,14 +117,6 @@ body {
     background-color: lightgreen;
 }
 
-.star {
-    width: 30px;
-}
-
-.rating-bar {
-    display: flex;
-}
-
 .opinion-text {
     margin: 5px;
     padding:5px;
