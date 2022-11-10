@@ -130,9 +130,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    os.path.abspath(os.path.join("static")),
+    os.path.abspath(os.path.join(BASE_DIR, "usadba_app/static")),
 ]
-STATIC_ROOT = '' # os.path.join(BASE_DIR, "static")
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 print("THIS IS NOVEMBER TWO", os.path.abspath(STATIC_ROOT))
 
 MEDIA_URL = '/media/'
