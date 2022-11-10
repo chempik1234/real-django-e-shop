@@ -15,25 +15,26 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from usadba_app import views
+from usadba_app.views import *
+from git_pull import *
 from usadba_project import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path('', views.landing),
-    path('github_update_pythonanywhere', views.github_update_pythonanywhere),
-    path('search', views.search),
-    path('categories', views.categories),
-    path('profile', views.profile),
-    path('register', views.register),
-    path('login', views.log_in),
-    path('logout', views.logout_),
-    path('product/add_opinion/<str:pr_table>/<int:pr_id>', views.add_opinion),
-    path('product/del_opinion/<str:pr_table>/<int:pr_id>', views.del_opinion),
-    path('product/buy/<str:product_type>/<str:title>', views.product_buy),
-    path('rate', views.leave_rate),
-    path('product/<str:product_type>/<int:pr_id>', views.product),
-    path('product/<str:product_type>', views.product_list),
+    path('', landing),
+    path('github_update_pythonanywhere', github_update_pythonanywhere),
+    path('search', search),
+    path('categories', categories),
+    path('profile', profile),
+    path('register', register),
+    path('login', log_in),
+    path('logout', logout_),
+    path('product/add_opinion/<str:pr_table>/<int:pr_id>', add_opinion),
+    path('product/del_opinion/<str:pr_table>/<int:pr_id>', del_opinion),
+    path('product/buy/<str:product_type>/<str:title>', product_buy),
+    path('rate', leave_rate),
+    path('product/<str:product_type>/<int:pr_id>', product),
+    path('product/<str:product_type>', product_list),
     path('admin/', admin.site.urls),
 ]
 

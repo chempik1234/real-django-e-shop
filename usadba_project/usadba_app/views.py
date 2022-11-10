@@ -1,12 +1,10 @@
 from django.shortcuts import render
-from django.http import HttpResponseRedirect, HttpResponseNotFound, HttpResponse, HttpResponseBadRequest
-from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponseRedirect, HttpResponseNotFound, HttpResponse
 from django.views.decorators.http import require_POST
 from django.core.files import File
 import urllib.request
 from .models import *
 from .forms import *
-import git
 from django.db.models import Sum
 import os, requests, datetime
 # from os import listdir
@@ -55,19 +53,6 @@ def get_rating(model_, id):
     else:
         c = 0
     return round(c / max(len(rates), 1), 1)
-
-
-# PULL
-@csrf_exempt
-def github_update_pythonanywhere(request):
-    if request.method == 'POST':
-        repo = git.Repo('./usadba_project', search_parent_directories=True)
-        _git = repo.git
-        _git.checkout('master')
-        _git.pull()
-        return HttpResponse('pulled_success')
-    else:
-        return HttpResponse('get_request', status=400)
 
 
 @register.filter(name='range')
