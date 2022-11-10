@@ -11,13 +11,18 @@
             {% if your_rate > 0 %}
             <h4 class="text-warning">(Ваша оценка: {{your_rate}})</h4>
             {% endif %}
-            <div>
-                <h3>Оценить:</h3>
-                <form method="post" action="/rate/{{product_type}}/{{id}}/" class="rating-bar">
-                {% for i in '12345'|make_list %}
-	                <input type="radio" id="star-{{i}}" name="rating" value="{{i}}">
-	                <label for="star-{{i}}" title="Оценка «{{i}}»"></label>
-                {% endfor %}
+            <div class="border border-success rounded-lg" style="padding: 5px">
+                <form method="post" action="/rate">
+                    {% csrf_token %}
+                    <input type="hidden" id="id_product_type" name="product_type" value="{{ product_type }}">
+                    <input type="hidden" id="id_id" name="id" value="{{ id }}">
+                    <div class="rating-bar">
+                        {% for i in '54321'|make_list %}
+	                    <input type="radio" id="id_rate_{{i}}" name="rate" value="{{i}}">
+	                    <label for="id_rate_{{i}}" title='Оценить на "{{i}}"'></label>
+                        {% endfor %}
+                    </div>
+                    <input type="submit" value="Оценить" class="btn btn-primary">
                 </form>
             </div>
             <!------------------------------------------------------->

@@ -1,6 +1,7 @@
 from django.shortcuts import render
-from django.http import HttpResponseRedirect, HttpResponseNotFound, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponseNotFound, HttpResponse, HttpResponseBadRequest
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
 from django.core.files import File
 import urllib.request
 from .models import *
@@ -191,11 +192,24 @@ def product(request, product_type, pr_id):
     data_context["your_rate"] = your_rate
     data_context["img_url"] = item.image.url
     data_context["have_opinion"] = your_op
+    # data_context["rating_bar_form"] = RatingBar
     return render(request, 'usadba_app/product.html', context=data_context)
 
 
+@require_POST
 @login_required(login_url='/login')
-def leave_rate(request, product_type, pr_id, rate):
+def leave_rate(request):
+    rate, product_type, pr_id = request.POST.get('rate'),\
+                                request.POST.get('product_type'),\
+                                request.POST.get('id')
+    # if form.is_valid():
+    #     print(request.POST)
+    #     rate, product_type, pr_id = form.cleaned_data.get('rate'),\
+    #                                 form.cleaned_data.get('product_type'),\
+    #                                 form.cleaned_data.get('id')
+    #     print(rate, product_type, pr_id)
+    # else:
+    #     return HttpResponseBadRequest("Rating bar form is not valid (this is impossible)")
     table = STRING_TO_TABLE[product_type]
     item = table.objects.get(id=pr_id)
     if item:
@@ -209,7 +223,7 @@ def leave_rate(request, product_type, pr_id, rate):
             rate_obj = existing_rate.first()
             rate_obj.rate = rate
             rate_obj.save(update_fields=['rate'])
-        return HttpResponseRedirect(f'/product/{product_type}/{title}')
+        return HttpResponseRedirect(f'/product/{product_type}/{pr_id}')
     else:
         return HttpResponseNotFound("")
 

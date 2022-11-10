@@ -16,17 +16,13 @@
                 {% else %}
                 <div class="text-warning">
                     <h3>Оценка: {{item.rating}}</h3>
-                    <div class="rating-bar">
-                    {% for i in 0|range:item.rating %}
-                        <a>
-                            <img class="star" src="{% static 'img/general/star.png' %}">
-                        </a>
-                    {% endfor %}
-                    {% for i in item.rating|range:5 %}
-                        <a>
-                            <img class="star" src="{% static 'img/general/star_gray.png' %}">
-                        </a>
-                    {% endfor %}
+                    <div class="rating-result">
+                        {% for i in 0|range:item.rating %}
+	                    <span class="active"></span>
+                        {% endfor %}
+                        {% for i in item.rating|range:5 %}
+	                    <span></span>
+                        {% endfor %}
                     </div>
                 </div>
                 {% endif %}

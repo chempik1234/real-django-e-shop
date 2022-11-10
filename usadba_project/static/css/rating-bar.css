@@ -1,6 +1,5 @@
 .rating-bar {
 	overflow: hidden;
-	width: 265px;
 	margin: 0 auto;
 }
 .rating-bar:not(:checked) > input {
@@ -11,10 +10,9 @@
 	width: 42px;
 	padding: 0;
 	cursor: pointer;
-	font-size: 32px;
-	line-height: 32px;
+	font-size: 48px;
+	line-height: 1;
 	color: lightgrey;
-	text-shadow: 1px 1px #bbb;
 }
 .rating-bar:not(:checked) > label:before {
 	content: '★';
@@ -37,4 +35,22 @@
 }
 .rate-bar > label:active {
 	position: relative;
+}
+/* RATING RESULT */
+.rating-result {
+	margin: 0 auto;
+}
+.rating-result span {
+	padding: 0;
+	font-size: 64px;
+	margin: 0 1px;
+	line-height: 1;
+	color: lightgrey;
+}
+.rating-result > span:before {
+	content: '★';
+}
+.rating-result > span.active {
+	color: gold;
+	text-shadow: 1px 1px #c60;
 }

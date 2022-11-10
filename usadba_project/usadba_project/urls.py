@@ -31,7 +31,7 @@ urlpatterns = [
     path('product/add_opinion/<str:pr_table>/<int:pr_id>', views.add_opinion),
     path('product/del_opinion/<str:pr_table>/<int:pr_id>', views.del_opinion),
     path('product/buy/<str:product_type>/<str:title>', views.product_buy),
-    path('rate/<str:product_type>/<int:pr_id>/<int:rate>', views.leave_rate),
+    path('rate', views.leave_rate),
     path('product/<str:product_type>/<int:pr_id>', views.product),
     path('product/<str:product_type>', views.product_list),
     path('admin/', admin.site.urls),
