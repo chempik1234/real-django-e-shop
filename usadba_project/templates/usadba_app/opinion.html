@@ -8,11 +8,11 @@
             {% csrf_token %}
             <div class="form-group">
                 <label class="col col-form-label">Текст отзыва:</label>
-                <input type="text" name="text" class="form-control" required id="id_text" placeholder="Введите текст">
+                <textarea name="text" class="form-control" required id="id_text" placeholder="Введите текст"></textarea>
             </div>
             <div class="form-group">
-                <label class="col col-form-label">Текст отзыва:</label>
-                <input type="file" name="file" class="form-control-file" required id="id_file" placeholder="Выбрать файл">
+                <label for="id_file" class="col col-form-label">Изображение:</label>
+                <input type="file" name="file" class="form-control-file" id="id_file" placeholder="Выбрать файл">
             </div>
             {% for error in field.errors %}
             <div class="alert alert-danger">{{ error }}</div>

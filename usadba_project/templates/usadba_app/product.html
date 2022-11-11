@@ -9,7 +9,15 @@
             <!------------------------------------------------------->
             <h3 class="text-warning">Оценка: {% if rates == 0 %}ещё нет оценок{% else %}{{rate}}{% endif %}</h3>
             {% if your_rate > 0 %}
-            <h4 class="text-warning">(Ваша оценка: {{your_rate}})</h4>
+            <h4 class="text-warning">Ваша оценка:</h4>
+            <div class="rating-result">
+                {% for i in 0|range:your_rate %}
+	            <span class="active"></span>
+                {% endfor %}
+                {% for i in your_rate|range:5 %}
+	            <span></span>
+                {% endfor %}
+            </div>
             {% endif %}
             <div class="border border-success rounded-lg" style="padding: 5px">
                 <form method="post" action="/rate">
@@ -17,7 +25,7 @@
                     <input type="hidden" id="id_product_type" name="product_type" value="{{ product_type }}">
                     <input type="hidden" id="id_id" name="id" value="{{ id }}">
                     <div class="rating-bar">
-                        {% for i in '54321'|make_list %}
+                        {% for i in '12345'|make_list %}
 	                    <input type="radio" id="id_rate_{{i}}" name="rate" value="{{i}}">
 	                    <label for="id_rate_{{i}}" title='Оценить на "{{i}}"'></label>
                         {% endfor %}
@@ -63,20 +71,16 @@
         <h3>Нет фото</h3>
         {% endif %}
         {% if item.3 > 0 %}
-        <div class="rating-bar">
-        {% for i in 0|range:item.3 %}
-            <a>
-                <img class="star" src="{% static 'img/general/star.png' %}">
-            </a>
-        {% endfor %}
-        {% for i in item.3|range:5 %}
-            <a>
-                <img class="star" src="{% static 'img/general/star_gray.png' %}">
-            </a>
-        {% endfor %}
+        <div class="rating-result">
+            {% for i in 0|range:item.3 %}
+	        <span class="active"></span>
+            {% endfor %}
+            {% for i in item.3|range:5 %}
+	        <span></span>
+            {% endfor %}
         </div>
         {% endif %}
-        <p class="opinion-text">{{item.1}}</p>
+        <textarea class="opinion-text" readonly>{{item.1}}</textarea>
     </div>
     {% endfor %}
 </div>
