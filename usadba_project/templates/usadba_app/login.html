@@ -8,7 +8,7 @@
         <!--{% if field.name != "remember_me" %}-->
         <div class="form-group">
             <label class="col col-form-label">{{field.label}}</label>
-            <input type="{{field.type}}" name="{{field.name}}" class="form-control" required id="{{field.id_for_label}}"
+            <input type="{{field.field.widget.input_type}}" name="{{field.name}}" class="form-control" required id="{{field.id_for_label}}"
                    placeholder="Введите {{field.label}}">
         </div>
         <!--{% else %}
