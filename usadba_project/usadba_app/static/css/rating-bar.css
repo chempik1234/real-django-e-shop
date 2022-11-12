@@ -6,12 +6,13 @@
 	display: none;
 }
 .rating-bar:not(:checked) > label {
-	float: left;
+	float: right;
 	padding: 0;
 	cursor: pointer;
+	width: 30px;
 	font-size: 30px;
 	line-height: 1;
-	color: lightgrey;
+	color: lightgray;
 }
 .rating-bar:not(:checked) > label:before {
 	content: '★';
