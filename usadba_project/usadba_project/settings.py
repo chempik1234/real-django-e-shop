@@ -84,8 +84,8 @@ WSGI_APPLICATION = 'usadba_project.wsgi.application'
 
 DATABASES = {
     'default': {
-        'NAME': 'usadba_project/usadba_db',
         'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'usadba_project/usadba_db',
         #'USER': 'usadba_db_user',
         #'PASSWORD': 'mypassword',
         #'HOST': 'localhost',
