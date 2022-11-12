@@ -1,6 +1,9 @@
 body {
     background-color: #F5F5F5;
 }
+.text-shadow-lg {
+    text-shadow: 0 1px 10px black;
+}
 .icon {
     width: 100px;
 }
@@ -13,8 +16,30 @@ body {
 .row-of-div:not(:last-child){
     margin-right: 30px;
 }
+.bg-tree {
+  background: url(/static/img/general/tree.png) no-repeat;
+}
+.landing-lg {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    min-height: 600px;
+    max-height: 1500px;
+}
+.landing-lg > div:first-child {
+    margin-top: 100px;
+}
+.landing-lg > div:not(:first-child) {
+    margin-top: 50px;
+}
+.landing-lg > div:not(:last-child) {
+    margin-bottom: 50px;
+}
+.landing-lg > div:last-child {
+    margin-bottom: 20px;
+}
 .landing-card {
-    width: 25%;
+    width: 20%;
     display: flex;
     flex-direction: column;
     height: auto;
@@ -48,6 +73,14 @@ body {
     margin-top: auto;
     margin-bottom: auto;
 }
+.horizontal-left {
+    margin-left: 0;
+    margin-right: auto;
+}
+.horizontal-right {
+    margin-left: auto;
+    margin-right: 0;
+}
 .both-center {
     margin: auto;
 }
@@ -59,9 +92,13 @@ body {
     margin-top: 0;
     margin-bottom: auto;
 }
+.all-margin-0 {
+    margin: 0;
+}
 .gradient-0 {
     background: rgb(2,0,36);
-    background: linear-gradient(140deg, rgba(150,150,75,1) 0%, rgba(20,120,20,1) 20%, rgba(20,150,50,1) 58%, rgba(9,100,0,1) 100%);
+    /* background: linear-gradient(140deg, rgba(150,150,75,1) 0%, rgba(20,120,20,1) 20%, rgba(20,150,50,1) 58%, rgba(9,100,0,1) 100%); */
+    background: linear-gradient(45deg, rgba(30,70,22,1) 0%, rgba(60,90,10,1) 20%, rgba(90,20,10,1) 50%, rgba(30,90,10,1) 70%, rgba(4,60,0,1) 100%);
 }
 .gradient-1 {
     background: rgb(150,0,180);

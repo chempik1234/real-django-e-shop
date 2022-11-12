@@ -16,7 +16,7 @@
   <body>
     <header>
       <nav class="navbar navbar-dark bg-dark">
-        <a class="navbar-title" href="/"><h1>Магазин "Усадьба"</h1></a>
+        <a class="navbar-title" href="/"><h1>Главная</h1></a>
         <a class="nav-btn" href="/about">О нас</a>
         {% if user.is_authenticated %}
           <a class="navbar-brand" href="/profile">{{ user.username }} ({{ user.first_name }} {{user.last_name}})</a>
@@ -30,28 +30,77 @@
       </nav>
     </header>
     <!--                                   -->
-    <div class="w-100 gradient-0 d-flex" style="height: 800px">
-      <div class="border border-light border-bottom-0 w-75 h-50 both-center container">
-        {% if user.is_authenticated %}
-        <h3 class="text-center text-light btm-margin-0 horizontal-center">
-          Найдите нужный товар с помощью поиска по имени или категории!
-        </h3>
-        <form action="/search" class="top-bar-inner align-self-center input-group">
-          <input type="text" name="q" class="form-control" placeholder="" aria-label="" aria-describedby="basic-addon1">
-          <div class="input-group-append">
-            <input type="submit" class="btn btn-success" value="Найти">
+    <div class="gradient-0">
+      <div class="bg-tree bg-tree text-center landing-lg">
+        <!-- Header -->
+        <div class="text-shadow-lg both-center d-inline-block" style="flex-basis: 60%">
+          <h1 class="horizontal-center text-light btm-margin-0">Магазин "<span class="text-warning">Усадьба</span>"</h1>
+          <h3 class="text-light horizontal-center w-100 top-margin-0">
+            Мы продаём товары для сада и дома
+          </h3>
+        </div>
+        <!-- Search -->
+        <div class="text-shadow-lg both-center" style="flex-basis: 60%">
+          <div class="shadow-lg both-center border border-light border-bottom-0 container">
+            <h3 class="text-center text-light btm-margin-0 horizontal-center">
+              Какой товар вы ищете?
+            </h3>
+            <form action="/search" class="top-bar-inner align-self-center input-group">
+              <input type="text" name="q" class="form-control" placeholder="" aria-label="" aria-describedby="basic-addon1">
+              <div class="input-group-append">
+                <input type="submit" class="btn btn-success" value="Найти">
+              </div>
+            </form>
+            <a class="btn btn-lg btn-primary shadow-lg top-margin-0 horizontal-center" href="/categories">Перейти в категории</a>
           </div>
-        </form>
-        <a class="btn btn-lg btn-primary shadow-lg top-margin-0 horizontal-center" href="/categories">Перейти в категории</a>
-        {% else %}
-        <h3 class="text-light btm-margin-0 horizontal-center">Войдите в аккаунт, чтобы делать покупки!</h3>
-        <a class="btn btn-lg btn-primary shadow-lg top-margin-0 horizontal-center" href="/login">Войти</a>
+        </div>
+        <!-- Sign in form -->
+        {% if not user.is_authenticated %}
+        <div class="both-center text-left container" style="flex-basis: 30%">
+          <h3 class="text-shadow-lg text-light btm-margin-0 text-center horizontal-left">Зарегистрируйтесь, чтобы делать покупки!</h3>
+          <div class="card">
+            <form class="card-body" method="post" action="/register">
+              {% csrf_token %}
+               <div class="form-group">
+                <label class="col col-form-label">Имя пользователя</label>
+                <input type="text" name="username" class="form-control" required id="id_username"
+                       placeholder="Введите Имя пользователя">
+                </div>
+              <div class="form-group">
+                <label class="col col-form-label">Фамилия</label>
+                <input type="text" name="surname" class="form-control" required id="id_surname"
+                       placeholder="Введите Фамилия">
+              </div>
+              <div class="form-group">
+                <label class="col col-form-label">Имя</label>
+                <input type="text" name="name" class="form-control" required id="id_name"
+                       placeholder="Введите Имя">
+              </div>
+              <div class="form-group">
+                <label class="col col-form-label">Логин / Почта</label>
+                <input type="email" name="email" class="form-control" required id="id_email"
+                       placeholder="Введите Логин / Почта">
+              </div>
+              <div class="form-group">
+                <label class="col col-form-label">Пароль</label>
+                <input type="password" name="password1" class="form-control" required id="id_password1"
+                       placeholder="Введите Пароль">
+              </div>
+              <div class="form-group">
+                <label class="col col-form-label">Подтверждение пароля</label>
+                <input type="password" name="password2" class="form-control" required id="id_password2"
+                       placeholder="Введите Подтверждение пароля">
+              </div>
+              <input type="submit" class="btn btn-lg btn-primary shadow-lg top-margin-0 horizontal-center" value="Зарегистрироваться">
+            </form>
+          </div>
+        </div>
         {% endif %}
       </div>
     </div>
     <!--                                   -->
     <div class="round-border-padding shadow-lg">
-      <h1 class="w-100 horizontal-center">Почему мы?</h1>
+      <h1 class="w-100 text-center">Почему мы?</h1>
       <div class="row-of-div">
         <div class="landing-card">
           <img src="{%static 'img/general/percent.png'%}" class="landing-image gradient-1 shadow">
