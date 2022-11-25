@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 import os
 from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator, MinValueValidator
@@ -32,7 +33,12 @@ class Product(models.Model):
     price = models.IntegerField(null=False, default=1, validators=[MinValueValidator(1)])
 
     class Meta:
+        verbose_name = 'Товар'
+        verbose_name_plural = 'Товары'
         abstract = True
+
+    def __str__(self):
+        return self.title
 
 
 class Rates(models.Model):

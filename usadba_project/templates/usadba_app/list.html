@@ -30,6 +30,11 @@
                 <h2>{{item.price}} ₽.</h2>
                 <a href="/product/buy/{{item.product_type}}/{{item.id}}" class="btn btn-warning">Купить</a>
                 <a href="/product/{{item.product_type}}/{{item.id}}" class="btn btn-primary">Подробнее</a>
+                <form method="post" action="/cart/add/{{item.product_type}}/{{item.id}}/">
+                    {% csrf_token %}
+                    <input type="number" name="quantity" id="id_quantity" class="form-control">
+                    <input type="submit" value="В корзину" class="btn btn-secondary">
+                </form>
             </div>
         </div>
     {% endfor %}

@@ -172,6 +172,23 @@ body {
     width: 300px;
 }
 
+.bucket-table {
+    width: 100%;
+}
+.bucket-table th {
+    border: 2px solid green;
+    padding: 10px;
+    background-color: #EEFFEE;
+}
+.bucket-table td {
+    border: 1px solid darkgreen;
+    padding: 10px;
+    background-color: white;
+}
+.bucket-table img {
+    width: 100px;
+}
+
 .container {
   display: grid;
   gap: 20px;

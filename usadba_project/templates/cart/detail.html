@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="vertical-div">
+    <h2>Итого: {{cart.get_total_price}} ₽</h2>
+    <form action="{% url 'cart:cart_clear' %}" method="post">
+        {% csrf_token %}
+        <input type="submit" value="Очистить корзину полностью" class="btn btn-warning">
+    </form>
+    {% with dict=cart.cart %}
+    <table class="bucket-table">
+        <thead>
+          <tr>
+            <th>Картинка</th>
+            <th>Название</th>
+            <th>Обновить кол-во</th>
+            <th>Убрать</th>
+            <th>Количество</th>
+            <th>Цена 1 штуки</th>
+            <th>Общая стоимость</th>
+          </tr>
+        </thead>
+        <tr>
+        {% for i, item in dict.items %}
+
+            {% with product=item.product %}
+              <tr>
+                <td>
+                  <a href="/product/{{item.product_type}}/{{product.id}}">
+                    <img src="{% if product.image %}{{ product.image.url }}{% endif %}">
+                  </a>
+                </td>
+                <td>{{ product.title }}</td>
+                <td>
+                  <form action="{% url 'cart:cart_add' item.product_type product.id %}" method="post">
+                      {% csrf_token %}
+                      <input type="number" name="quantity" id="id_quantity" class="form-control">
+                      <input type="submit" value="Изменить" class="btn btn-secondary">
+                  </form>
+                </td>
+                <td><a href="{% url 'cart:cart_remove' item.product_type product.id %}" class="btn btn-danger">Удалить</a></td>
+                <td>
+                  {{ item.quantity }}
+                </td>
+                <td class="num">{{ item.price }} ₽</td>
+                <td class="num">{{ item.total_price }} ₽</td>
+              </tr>
+            {% endwith %}
+        </tr>
+        {% endfor %}
+    </table>
+    {% endwith %}
+</div>
+{% endblock %}

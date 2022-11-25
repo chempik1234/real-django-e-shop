@@ -36,6 +36,18 @@ DEFAULT_CONTEXT = {
 }
 
 
+def remove_underlines(string):
+    res = string[0].upper()
+    for i in range(1, len(string)):
+        if string[i] == "_":
+            continue
+        if string[i - 1] == "_":
+            res += string[i].upper()
+        else:
+            res += string[i]
+    return res
+
+
 def x_or_y_if_a(a, x, y):
     if a is None:
         return None
@@ -103,6 +115,7 @@ def categories(request):
 
 def product_list(request, product_type):
     d = []
+    product_type = remove_underlines(product_type)
     types = {'TomatoSeeds': ('Семена помидоров', TomatoSeeds)}
     table = types[product_type][1]
     current_user = request.user
