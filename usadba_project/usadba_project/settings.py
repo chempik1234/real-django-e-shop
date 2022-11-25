@@ -36,6 +36,7 @@ SECURE_CROSS_ORIGIN_OPENER_POLICY = None
 INSTALLED_APPS = [
     'usadba_app',
     'cart',
+    'git_pull',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
