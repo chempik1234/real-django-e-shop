@@ -4,20 +4,35 @@
 <div class="product product-page-product">
     <h1>{{title}}</h1>
     <div class="wrapper container">
-        <img src="{{img_url}}">
-        <div>
+        <img class="product-page-img" src="{{img_url}}">
+        <div class="inner-padding">
             <!------------------------------------------------------->
-            <h3 class="text-warning">Оценка: {% if rates == 0 %}ещё нет оценок{% else %}{{rate}}{% endif %}</h3>
-            {% if your_rate > 0 %}
-            <h4 class="text-warning">Ваша оценка:</h4>
-            <div class="rating-result">
-                {% for i in 0|range:your_rate %}
-	            <span class="active"></span>
-                {% endfor %}
-                {% for i in your_rate|range:5 %}
-	            <span></span>
-                {% endfor %}
+            {% if rates == 0 %}<h3 class="text-warning">ещё нет оценок</h3>
+            {% else %}
+            <div>
+                <h3 class="text-warning">Оценка:</h3>
+                <div class="rating-result">
+                    {% for i in 0|range:rate %}
+	                <span class="active"></span>
+                    {% endfor %}
+                    {% for i in rate|range:5 %}
+	                <span></span>
+                    {% endfor %}
+                </div>
             </div>
+            {% if your_rate > 0 %}
+            <div>
+                <h4 class="text-warning">Ваша оценка:</h4>
+                <div class="rating-result">
+                    {% for i in 0|range:your_rate %}
+	                <span class="active"></span>
+                    {% endfor %}
+                    {% for i in your_rate|range:5 %}
+	                <span></span>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
             {% endif %}
             <div class="border border-success rounded-lg" style="padding: 5px">
                 <form method="post" action="/rate">
@@ -33,9 +48,18 @@
                     <input type="submit" value="Оценить" class="btn btn-primary">
                 </form>
             </div>
+            <div>
+                <form method="post" action="/cart/add/{{product_type}}/{{id}}/">
+                    {% csrf_token %}
+                    <input type="number" name="quantity" id="id_quantity" class="form-control">
+                    <input type="submit" value="В корзину" class="btn btn-secondary">
+                </form>
+            </div>
             <!------------------------------------------------------->
-            <h4 style="margin-top: 20px;">{{price}} ₽</h4>
-            <a href="/product/buy/{{product_type}}/{{title}}" class="btn btn-warning">Купить</a>
+            <div>
+                <h4 style="margin-top: 20px;">{{price}} ₽</h4>
+                <a href="/product/buy/{{product_type}}/{{title}}" class="btn btn-warning">Купить</a>
+            </div>
         </div>
     </div>
     <h2>Описание:</h2>

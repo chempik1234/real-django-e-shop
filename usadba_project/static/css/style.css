@@ -1,6 +1,9 @@
 body {
     background-color: #F5F5F5;
 }
+.inner-padding div {
+    padding: 5px;
+}
 .text-shadow-lg {
     text-shadow: 0 1px 10px black;
 }
@@ -139,6 +142,10 @@ body {
 
 .product-page-product {
     min-width: auto;
+}
+.product-page-img {
+    height: 300px;
+    width: 300px;
 }
 
 .product-img {
