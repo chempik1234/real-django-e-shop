@@ -31,7 +31,7 @@ urlpatterns = [
     path('logout', logout_),
     path('product/add_opinion/<str:pr_table>/<int:pr_id>', add_opinion),
     path('product/del_opinion/<str:pr_table>/<int:pr_id>', del_opinion),
-    path('product/buy/<str:product_type>/<str:title>', product_buy),
+    path('product/buy/', product_buy),  # <str:product_table>/<int:id> L6rHDOlWhBiAW8H4iv1TT2Jy
     path('rate', leave_rate),
     path('product/<str:product_type>/<int:pr_id>', product),
     path('product/<str:product_type>', product_list),

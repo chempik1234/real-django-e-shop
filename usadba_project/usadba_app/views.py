@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponseNotFound, HttpResponse
 from django.views.decorators.http import require_POST
 from django.core.files import File
@@ -15,6 +15,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.template.loader_tags import register
 from django.contrib import messages
+from cloudipsp import Api, Checkout
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'bmp'}
 SEED_CATEGORIES = {'Помидоры': 'Tomato',
                    'Огурцы': 'Cucumber',
@@ -307,10 +308,11 @@ def profile(request):
 
 
 @login_required(login_url='/login')
-def product_buy(request, product_type, title):
-    # tables = {'cpu': CPU, 'gpu': GPU, 'motherboard': Motherboard}
-    # item = tables[product_type].objects.get(title=title)
-    # price = item.price
+def product_buy(request, product_table, id):
+    product_table = remove_underlines(product_table)
+    table = STRING_TO_TABLE[product_table]
+    item = get_object_or_404(table, id=id)
+    price = item.price
     # json_ = {
     #     "caption": "Покупка товара",
     #     "description": "Название: " + title,
@@ -332,7 +334,8 @@ def product_buy(request, product_type, title):
     #     "return_url": "/product/" + product_type
     #     }
     # requests.post('https://pay-sdk.yandex.net/v1', json=json_)
-    return index(request)
+    # api = Api(merchant_id=1396424)
+    return profile(request)
 
 
 def register(request):
