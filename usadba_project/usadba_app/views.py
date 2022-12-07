@@ -5,6 +5,8 @@ from django.core.files import File
 import urllib.request
 from .models import *
 from .forms import *
+from rest_framework import viewsets
+from .serializers import TomatoSeedsSerializer, SeedsCategoriesSerializer
 from django.db.models import Sum
 import os, requests, datetime
 # from os import listdir
@@ -71,6 +73,13 @@ def get_rating(model_, id):
 @register.filter(name='range')
 def filter_range(start, end):
     return range(int(start), int(end))
+
+
+####################################################
+class TomatoSeedsViewSet(viewsets.ModelViewSet):
+    queryset = TomatoSeeds.objects.all().order_by('title')
+    serializer_class = TomatoSeedsSerializer
+####################################################
 
 
 # Views

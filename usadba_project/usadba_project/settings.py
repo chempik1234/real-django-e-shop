@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'usadba_app',
     'cart',
     'git_pull',
+    'rest_framework',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

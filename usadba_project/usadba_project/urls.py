@@ -21,6 +21,7 @@ from usadba_project import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
+    path('api/', include('usadba_app.urls')),
     path('', landing),
     path('github_update_pythonanywhere', github_update_pythonanywhere),
     path('search', search),
