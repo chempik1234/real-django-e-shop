@@ -3,6 +3,7 @@ from .models import *
 PRODUCT_FIELDS = ("title", "image", "description", "price")
 SEED_FIELDS = ("category", "ripening_period", "ripe_color", "ripe_form", "ripe_weight_grams", "yield_kg_div_m2")
 
+
 ##########
 class SeedsCategoriesSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:

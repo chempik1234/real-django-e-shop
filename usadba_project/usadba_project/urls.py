@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 from usadba_app.views import *
 from git_pull.views import *
 from usadba_project import settings
@@ -24,7 +24,8 @@ urlpatterns = [
     path('api/', include('usadba_app.urls')),
     path('', landing),
     path('github_update_pythonanywhere', github_update_pythonanywhere),
-    path('search', search),
+    re_path(r'^search/$', SearchList.as_view()),
+    # path('search', search),
     path('categories', categories),
     path('profile', profile),
     path('register', register),

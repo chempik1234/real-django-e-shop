@@ -3,21 +3,32 @@ from django.http import HttpResponseRedirect, HttpResponseNotFound, HttpResponse
 from django.views.decorators.http import require_POST
 from django.core.files import File
 import urllib.request
+
 from .models import *
 from .forms import *
+
 from rest_framework import viewsets
+from rest_framework.views import APIView
+from rest_framework.renderers import TemplateHTMLRenderer
+from rest_framework.response import Response
+
 from .serializers import TomatoSeedsSerializer, SeedsCategoriesSerializer
 from django.db.models import Sum
+
 import os, requests, datetime
 # from os import listdir
 # from os.path import isfile, join, basename
 from random import randint
+
 from django.contrib.auth import logout, login
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+
 from django.template.loader_tags import register
 from django.contrib import messages
+
 from cloudipsp import Api, Checkout
+
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'bmp'}
 SEED_CATEGORIES = {'Помидоры': 'Tomato',
                    'Огурцы': 'Cucumber',
@@ -82,29 +93,43 @@ class TomatoSeedsViewSet(viewsets.ModelViewSet):
 ####################################################
 
 
+class SearchList(APIView):
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'usadba_app/list.html'
+
+    def get(self, request):
+        text = request.GET.get("q")
+        items = []
+        if text:
+            current_user = request.user
+            for table in PRODUCT_TABLES:
+                items_found_in_table = table.objects.filter(title__icontains=text)
+                for item in items_found_in_table:
+                    your_rate = Rates.objects.filter(user_id=current_user, pr_table=item._meta.db_table, pr_id=item.id)
+                    if your_rate.exists():
+                        your_rate = your_rate.first().rate
+                    else:
+                        your_rate = 0
+                    items.append({'title': item.title,
+                                  'price': item.price,
+                                  'rating': get_rating(table, item.id),
+                                  'your_rate': your_rate,
+                                  'id': item.id,
+                                  'product_type': TABLE_TO_STRING[table]})
+        data_context = DEFAULT_CONTEXT.copy()
+        data_context["main_title"] = "Результаты поиска: " + text
+        data_context["title"] = "Результаты поиска"
+        data_context["seed_categories"] = SEED_CATEGORIES
+        data_context["dictionary"] = items
+        return Response(data_context)
+####################################################
+
 # Views
 def search(request):
     q = request.GET.get('q', '')
     data_context = DEFAULT_CONTEXT.copy()
     data_context["main_title"] = "Результаты поиска: " + q
     data_context["title"] = "Результаты поиска"
-    items = []
-    current_user = request.user
-    for table in PRODUCT_TABLES:
-        items_found_in_table = table.objects.filter(title__icontains=q)
-        for item in items_found_in_table:
-            your_rate = Rates.objects.filter(user_id=current_user, pr_table=item._meta.db_table, pr_id=item.id)
-            if your_rate.exists():
-                your_rate = your_rate.first().rate
-            else:
-                your_rate = 0
-            items.append({'title': item.title,
-                          'price': item.price,
-                          'rating': get_rating(table, item.id),
-                          'your_rate': your_rate,
-                          'id': item.id,
-                          'product_type': TABLE_TO_STRING[table]})
-    data_context["dictionary"] = items
     data_context["seed_categories"] = SEED_CATEGORIES
     return render(request, 'usadba_app/list.html', context=data_context)
 
