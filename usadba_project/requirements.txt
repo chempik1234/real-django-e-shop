@@ -4,3 +4,5 @@ requests
 pillow
 Pillow
 PIL
+cloudipsp
+djangorestframework

@@ -1,6 +1,9 @@
 body {
     background-color: #F5F5F5;
 }
+.down-ellipse {
+    clip-path: ellipse(100% 60% at 50% 40%
+}
 .inner-padding div {
     padding: 5px;
 }
