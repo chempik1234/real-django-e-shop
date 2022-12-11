@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponseRedirect, HttpResponseNotFound, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponseNotFound, HttpResponse, Http404
 from django.views.decorators.http import require_POST
 from django.core.files import File
 import urllib.request
@@ -93,6 +93,7 @@ class TomatoSeedsViewSet(viewsets.ModelViewSet):
 ####################################################
 
 
+# Views
 class SearchList(APIView):
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'usadba_app/list.html'
@@ -123,16 +124,6 @@ class SearchList(APIView):
         data_context["seed_categories"] = SEED_CATEGORIES
         data_context["dictionary"] = items
         return Response(data_context)
-####################################################
-
-# Views
-def search(request):
-    q = request.GET.get('q', '')
-    data_context = DEFAULT_CONTEXT.copy()
-    data_context["main_title"] = "Результаты поиска: " + q
-    data_context["title"] = "Результаты поиска"
-    data_context["seed_categories"] = SEED_CATEGORIES
-    return render(request, 'usadba_app/list.html', context=data_context)
 
 
 def landing(request):
@@ -149,85 +140,92 @@ def categories(request):
     return render(request, 'usadba_app/categories.html', context=data)
 
 
-def product_list(request, product_type):
-    d = []
-    product_type = remove_underlines(product_type)
-    types = {'TomatoSeeds': ('Семена помидоров', TomatoSeeds)}
-    table = types[product_type][1]
-    current_user = request.user
-    for item in table.objects.all():
-        your_rate = 0
+class ProductListView(APIView):
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'usadba_app/list.html'
+
+    def get(self, request, product_type):
+        d = []
+        product_type = remove_underlines(product_type)
+        types = {'TomatoSeeds': ('Семена помидоров', TomatoSeeds)}
+        table = types[product_type][1]
+        current_user = request.user
+        for item in table.objects.all():
+            your_rate = 0
+            if current_user.is_authenticated:
+                your_rate = Rates.objects.filter(user_id=current_user,pr_table=item._meta.db_table,pr_id=item.id)
+                if your_rate.exists():
+                    your_rate = your_rate.first().rate
+            d.append({'title': item.title,
+                      'price': item.price,
+                      'rating': get_rating(table, item.id),
+                      'your_rate': your_rate,
+                      'id': item.id,
+                      'product_type': product_type,
+                      'image_url': item.image.url})
+        data_context = DEFAULT_CONTEXT.copy()
+        data_context["title"] = types[product_type][0]
+        data_context["main_title"] = types[product_type][0]
+        data_context["dictionary"] = d
+        data_context["seed_categories"] = SEED_CATEGORIES
+        data_context["main_title"] = types[product_type][0]
+        return Response(data_context)
+
+
+class Product(APIView):
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'usadba_app/product.html'
+
+    def get(self, request, product_type, pr_id):
+        tables = {'TomatoSeeds': TomatoSeeds}
+        item_model = tables[product_type]
+        item = item_model.objects.get(id=pr_id)
+        title = item.title
+        d = {}
+        if "Seeds" in product_type:
+            d["Категория"] = item.category.name
+            d["Период созревания"] = item.ripening_period.name
+            d["Цвет плода"] = item.ripe_color
+            d["Форма плода"] = item.ripe_form
+            d["Вес плода в граммах"] = item.ripe_weight_grams
+            d["Урожайность на квадратный метр"] = str(item.yield_kg_div_m2) + " кг"
+        if "Tomato" in product_type:
+            d["Тип растения"] = item.type_of_plant.name
+            d["Условия выращивания"] = item.ground_growing_conditions.name + ' грунт'
+        opinions_db = Opinion.objects.filter(pr_table=product_type, pr_id=item.id)
+        opinions = []
+        for i in opinions_db:
+            some_user = i.user_id
+            some_rate = Rates.objects.filter(user_id=some_user,pr_table=item_model._meta.db_table,pr_id=item.id)
+            if some_rate.exists():
+                some_rate = some_rate.first().rate
+            else:
+                some_rate = 0
+            opinions.append([some_user.username, i.text, i.image, some_rate])
+        current_user = request.user
+        if not opinions:
+            opinions = None
+        your_op, your_rate = False, 0
         if current_user.is_authenticated:
+            if Opinion.objects.filter(pr_table=product_type, pr_id=item.id, user_id=current_user).exists():
+                your_op = True
             your_rate = Rates.objects.filter(user_id=current_user,pr_table=item._meta.db_table,pr_id=item.id)
             if your_rate.exists():
                 your_rate = your_rate.first().rate
-        d.append({'title': item.title,
-                  'price': item.price,
-                  'rating': get_rating(table, item.id),
-                  'your_rate': your_rate,
-                  'id': item.id,
-                  'product_type': product_type,
-                  'image_url': item.image.url})
-    data_context = DEFAULT_CONTEXT.copy()
-    data_context["title"] = types[product_type][0]
-    data_context["main_title"] = types[product_type][0]
-    data_context["dictionary"] = d
-    data_context["seed_categories"] = SEED_CATEGORIES
-    data_context["main_title"] = types[product_type][0]
-    return render(request, 'usadba_app/list.html', context=data_context)
-
-
-def product(request, product_type, pr_id):
-    tables = {'TomatoSeeds': TomatoSeeds}
-    item_model = tables[product_type]
-    item = item_model.objects.get(id=pr_id)
-    title = item.title
-    d = {}
-    if "Seeds" in product_type:
-        d["Категория"] = item.category.name
-        d["Период созревания"] = item.ripening_period.name
-        d["Цвет плода"] = item.ripe_color
-        d["Форма плода"] = item.ripe_form
-        d["Вес плода в граммах"] = item.ripe_weight_grams
-        d["Урожайность на квадратный метр"] = str(item.yield_kg_div_m2) + " кг"
-    if "Tomato" in product_type:
-        d["Тип растения"] = item.type_of_plant.name
-        d["Условия выращивания"] = item.ground_growing_conditions.name + ' грунт'
-    opinions_db = Opinion.objects.filter(pr_table=product_type, pr_id=item.id)
-    opinions = []
-    for i in opinions_db:
-        some_user = i.user_id
-        some_rate = Rates.objects.filter(user_id=some_user,pr_table=item_model._meta.db_table,pr_id=item.id)
-        if some_rate.exists():
-            some_rate = some_rate.first().rate
-        else:
-            some_rate = 0
-        opinions.append([some_user.username, i.text, i.image, some_rate])
-    current_user = request.user
-    if not opinions:
-        opinions = None
-    your_op, your_rate = False, 0
-    if current_user.is_authenticated:
-        if Opinion.objects.filter(pr_table=product_type, pr_id=item.id, user_id=current_user).exists():
-            your_op = True
-        your_rate = Rates.objects.filter(user_id=current_user,pr_table=item._meta.db_table,pr_id=item.id)
-        if your_rate.exists():
-            your_rate = your_rate.first().rate
-    data_context = DEFAULT_CONTEXT.copy()
-    data_context["item"] = d.items()
-    data_context["product_type"] = product_type
-    data_context["price"] = item.price
-    data_context["description"] = item.description
-    data_context["rate"] = get_rating(item_model, item.id)
-    data_context["img_dir"] = '/product_img/' + product_type
-    data_context["title"] = title
-    data_context["id"] = item.id
-    data_context["opinions"] = opinions
-    data_context["your_rate"] = your_rate
-    data_context["img_url"] = item.image.url
-    data_context["have_opinion"] = your_op
-    # data_context["rating_bar_form"] = RatingBar
-    return render(request, 'usadba_app/product.html', context=data_context)
+        data_context = DEFAULT_CONTEXT.copy()
+        data_context["item"] = d.items()
+        data_context["product_type"] = product_type
+        data_context["price"] = item.price
+        data_context["description"] = item.description
+        data_context["rate"] = get_rating(item_model, item.id)
+        data_context["img_dir"] = '/product_img/' + product_type
+        data_context["title"] = title
+        data_context["id"] = item.id
+        data_context["opinions"] = opinions
+        data_context["your_rate"] = your_rate
+        data_context["img_url"] = item.image.url
+        data_context["have_opinion"] = your_op
+        return Response(data_context)
 
 
 @require_POST
@@ -276,55 +274,52 @@ def allowed_file(filename):
 #     return HttpResponseRedirect()
 
 
-@login_required(login_url='/login')
-def add_opinion(request, pr_table, pr_id):
-    current_user = request.user
-    described_items = STRING_TO_TABLE[pr_table].objects.filter(id=pr_id)
-    if not described_items.exists():
-        return HttpResponseNotFound("")
-    described_item = described_items.first()
-    pr_title = described_item.title
-    if Opinion.objects.filter(pr_table=pr_table,pr_id=pr_id,user_id=current_user.id).exists():
-        messages.error(request, "Вы уже оставили отзыв.")
-        return product(request, pr_table, pr_title)
-    if request.method == 'POST':
+class OpinionView(APIView):
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'usadba_app/opinion.html'
+
+    def get(self, request, pr_table, pr_id):
+        current_user = request.user
+        described_items = STRING_TO_TABLE[pr_table].objects.filter(id=pr_id)
+        if not described_items.exists():
+            raise Http404
+        described_item = described_items.first()
+        pr_title = described_item.title
+        if Opinion.objects.filter(pr_table=pr_table,pr_id=pr_id,user_id=current_user.id).exists():
+            messages.error(request, "Вы уже оставили отзыв.")
+            return Response({"error": "Вы уже оставили отзыв."})
+        form_ = OpinionForm()
+        data_context = DEFAULT_CONTEXT.copy()
+        data_context["item_title"] = pr_title
+        data_context["main_title"] = "Оставить отзыв на " + pr_title
+        data_context["title"] = data_context["main_title"]
+        data_context["product_type"] = pr_table
+        data_context["form"] = form_
+        data_context["img_url"] = described_item.image.url
+        return Response(data_context)
+
+    def post(self, request, pr_table, pr_id):
         post = OpinionForm(request.POST, request.FILES)
-        if post.is_valid():
-            text, file = post.cleaned_data.get('text'), post.cleaned_data.get('file')
-            op = Opinion()
-            op.user_id = current_user
-            op.text = text
-            op.pr_table = pr_table
-            op.pr_id = pr_id
-            if file:
-                op.image = file
-            op.save()
-            print('saved')
-        else:
-            print(post.cleaned_data)
-        return HttpResponseRedirect(f'/product/{pr_table}/{pr_id}')
-    form_ = OpinionForm()
-    data_context = DEFAULT_CONTEXT.copy()
-    data_context["item_title"] = pr_title
-    data_context["main_title"] = "Оставить отзыв на " + pr_title
-    data_context["title"] = data_context["main_title"]
-    data_context["product_type"] = pr_table
-    data_context["form"] = form_
-    data_context["img_url"] = described_item.image.url
-    return render(request, 'usadba_app/opinion.html', context=data_context)
-
-
-@login_required(login_url='/login')
-def del_opinion(request, pr_table, pr_id):
-    if request.method == 'POST':
         opinion = Opinion.objects.filter(pr_table=pr_table,pr_id=pr_id,user_id=request.user)
         if opinion.exists():
+            print("del")
             opinion.delete()
             return HttpResponseRedirect('/product/{0}/{1}'.format(pr_table, pr_id))
         else:
-            return HttpResponse('YOUR (!) opinion does not exist', status=400)
-    else:
-        return HttpResponse('required_post', status=400)
+            if post.is_valid():
+                current_user = request.user
+                text, file = post.cleaned_data.get('text'), post.cleaned_data.get('file')
+                op = Opinion()
+                op.user_id = current_user
+                op.text = text
+                op.pr_table = pr_table
+                op.pr_id = pr_id
+                if file:
+                    op.image = file
+                op.save()
+                return HttpResponseRedirect('/product/{0}/{1}'.format(pr_table, pr_id))
+            else:
+                return HttpResponseRedirect('/product/opinion/{0}/{1}'.format(pr_table, pr_id))
 
 
 @login_required(login_url='/login')

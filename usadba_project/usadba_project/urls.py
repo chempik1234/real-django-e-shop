@@ -14,6 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.contrib.auth.decorators import login_required
 from django.urls import path, include, re_path
 from usadba_app.views import *
 from git_pull.views import *
@@ -31,12 +32,11 @@ urlpatterns = [
     path('register', register),
     path('login', log_in),
     path('logout', logout_),
-    path('product/add_opinion/<str:pr_table>/<int:pr_id>', add_opinion),
-    path('product/del_opinion/<str:pr_table>/<int:pr_id>', del_opinion),
+    path('product/opinion/<str:pr_table>/<int:pr_id>', login_required(OpinionView.as_view(), login_url='/login')),
     path('product/buy/', product_buy),  # <str:product_table>/<int:id> L6rHDOlWhBiAW8H4iv1TT2Jy
     path('rate', leave_rate),
-    path('product/<str:product_type>/<int:pr_id>', product),
-    path('product/<str:product_type>', product_list),
+    path('product/<str:product_type>/<int:pr_id>', Product.as_view()),
+    path('product/<str:product_type>', ProductListView.as_view()),
     path('admin/', admin.site.urls),
     path('cart/', include('cart.urls', namespace='cart')),
 ]

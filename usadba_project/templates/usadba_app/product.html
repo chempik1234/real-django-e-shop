@@ -76,12 +76,12 @@
         {% endfor %}
     </table>
     {% if have_opinion %}
-    <form method="post" action="/product/del_opinion/{{product_type}}/{{id}}">
+    <form method="post" action="/product/opinion/{{product_type}}/{{id}}">
         {% csrf_token %}
         <input type="submit" class="btn btn-danger" value="Убрать отзыв">
     </form>
     {% else %}
-    <a href="/product/add_opinion/{{product_type}}/{{id}}" class="btn btn-primary">Оставить отзыв</a>
+    <a href="/product/opinion/{{product_type}}/{{id}}" class="btn btn-primary">Оставить отзыв</a>
     {% endif %}
 </div>
 {% if opinions != None %}
