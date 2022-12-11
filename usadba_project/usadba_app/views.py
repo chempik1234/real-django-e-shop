@@ -105,7 +105,7 @@ class SearchList(APIView):
             for table in PRODUCT_TABLES:
                 items_found_in_table = table.objects.filter(title__icontains=text)
                 for item in items_found_in_table:
-                    your_rate = Rates.objects.filter(user_id=current_user, pr_table=item._meta.db_table, pr_id=item.id)
+                    your_rate = Rates.objects.filter(user_id=current_user.id, pr_table=item._meta.db_table, pr_id=item.id)
                     if your_rate.exists():
                         your_rate = your_rate.first().rate
                     else:
@@ -115,7 +115,8 @@ class SearchList(APIView):
                                   'rating': get_rating(table, item.id),
                                   'your_rate': your_rate,
                                   'id': item.id,
-                                  'product_type': TABLE_TO_STRING[table]})
+                                  'product_type': TABLE_TO_STRING[table],
+                                  "img_url": item.image.url})
         data_context = DEFAULT_CONTEXT.copy()
         data_context["main_title"] = "Результаты поиска: " + text
         data_context["title"] = "Результаты поиска"
