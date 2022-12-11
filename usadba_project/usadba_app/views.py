@@ -116,7 +116,7 @@ class SearchList(APIView):
                                   'your_rate': your_rate,
                                   'id': item.id,
                                   'product_type': TABLE_TO_STRING[table],
-                                  "img_url": item.image.url})
+                                  "image_url": item.image.url})
         data_context = DEFAULT_CONTEXT.copy()
         data_context["main_title"] = "Результаты поиска: " + text
         data_context["title"] = "Результаты поиска"
