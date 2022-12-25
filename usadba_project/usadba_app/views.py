@@ -12,7 +12,9 @@ from rest_framework.views import APIView
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
 
-from .serializers import TomatoSeedsSerializer, SeedsCategoriesSerializer
+from .serializers import TomatoSeedsSerializer,\
+    CucumberSeedsSerializer,\
+    SeedsCategoriesSerializer
 from django.db.models import Sum
 
 import os, requests, datetime
@@ -90,6 +92,11 @@ def filter_range(start, end):
 class TomatoSeedsViewSet(viewsets.ModelViewSet):
     queryset = TomatoSeeds.objects.all().order_by('title')
     serializer_class = TomatoSeedsSerializer
+
+
+class CucumberSeedsViewSet(viewsets.ModelViewSet):
+    queryset = CucumberSeeds.objects.all().order_by('title')
+    serializer_class = CucumberSeedsSerializer
 ####################################################
 
 
@@ -147,8 +154,8 @@ class ProductListView(APIView):
     def get(self, request, product_type):
         d = []
         product_type = remove_underlines(product_type)
-        types = {'TomatoSeeds': ('Семена помидоров', TomatoSeeds)}
-        table = types[product_type][1]
+        #{'TomatoSeeds': ('Семена помидоров', TomatoSeeds),}
+        table = STRING_TO_NAME_AND_TABLE[product_type][1]
         current_user = request.user
         for item in table.objects.all():
             your_rate = 0
@@ -164,11 +171,11 @@ class ProductListView(APIView):
                       'product_type': product_type,
                       'image_url': item.image.url})
         data_context = DEFAULT_CONTEXT.copy()
-        data_context["title"] = types[product_type][0]
-        data_context["main_title"] = types[product_type][0]
+        data_context["title"] = STRING_TO_NAME_AND_TABLE[product_type][0]
+        data_context["main_title"] = STRING_TO_NAME_AND_TABLE[product_type][0]
         data_context["dictionary"] = d
         data_context["seed_categories"] = SEED_CATEGORIES
-        data_context["main_title"] = types[product_type][0]
+        data_context["main_title"] = STRING_TO_NAME_AND_TABLE[product_type][0]
         return Response(data_context)
 
 

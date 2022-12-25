@@ -43,3 +43,13 @@ class TomatoSeedsSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = TomatoSeeds
         fields = PRODUCT_FIELDS + SEED_FIELDS + ('type_of_plant', 'ground_growing_conditions')
+
+
+class CucumberSeedsSerializer(serializers.HyperlinkedModelSerializer):
+    category = SeedsCategoriesSerializer()
+    ripening_period = RipeningPeriodsSerializer()
+    ground_growing_conditions = GroundGrowingConditionsSerializer()
+
+    class Meta:
+        model = CucumberSeeds
+        fields = PRODUCT_FIELDS + SEED_FIELDS + ('ground_growing_conditions',)
