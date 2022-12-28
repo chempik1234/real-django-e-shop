@@ -31,7 +31,7 @@ urlpatterns = [
     path('categories', categories),
     path('profile', profile),
     path('register', register),
-    path('accounts/login', log_in),
+    path('accounts/login/', log_in),
     path('login', log_in),
     re_path(r'^logout/$', LogoutView.as_view(), {'next_page': settings.LOGOUT_REDIRECT_URL}, name='logout'),
     path('product/opinion/<str:pr_table>/<int:pr_id>', login_required(OpinionView.as_view(), login_url='/login')),
