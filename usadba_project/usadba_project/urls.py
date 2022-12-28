@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.views import LogoutView
 from django.urls import path, include, re_path
 from usadba_app.views import *
 from git_pull.views import *
@@ -31,7 +32,7 @@ urlpatterns = [
     path('profile', profile),
     path('register', register),
     path('login', log_in),
-    path('logout', logout_),
+    re_path(r'^logout/$', LogoutView.as_view(), {'next_page': settings.LOGOUT_REDIRECT_URL}, name='logout'),
     path('product/opinion/<str:pr_table>/<int:pr_id>', login_required(OpinionView.as_view(), login_url='/login')),
     path('product/buy/', product_buy),  # <str:product_table>/<int:id> L6rHDOlWhBiAW8H4iv1TT2Jy
     path('rate', leave_rate),
