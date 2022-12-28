@@ -2,6 +2,8 @@ from django.db import models
 from django.urls import reverse
 import os
 from django.contrib.auth.models import User
+from django.utils.translation import gettext_lazy as _
+from django.utils import timezone
 from django.core.validators import MaxValueValidator, MinValueValidator
 
 # Create your models here.
@@ -50,6 +52,26 @@ class Rates(models.Model):
 
     class Meta:
         db_table = "rates"
+
+
+class Orders(models.Model):
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    date_created = models.DateTimeField(_("date joined"), default=timezone.now)
+    is_deliver = models.BooleanField()
+    is_cash = models.BooleanField()
+    has_been_paid = models.BooleanField(default=False)
+
+    class Meta:
+        db_table = "orders"
+
+
+class OrderToProduct(models.Model):
+    order_id = models.ForeignKey(Orders, on_delete=models.CASCADE)
+    product_id = models.IntegerField(validators=[MinValueValidator(1)])
+    product_db_table = models.CharField(max_length=30)
+
+    class Meta:
+        db_table = "order_to_product"
 
 
 ### СЕМЕНА

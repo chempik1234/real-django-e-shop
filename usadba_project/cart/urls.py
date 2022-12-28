@@ -1,4 +1,5 @@
 from django.urls import path
+from django.contrib.auth.decorators import login_required
 from . import views
 
 app_name = 'cart'
@@ -14,4 +15,7 @@ urlpatterns = [
     path('clear/',
          views.cart_clear,
          name='cart_clear'),
+    path('order/',
+         login_required(views.Order.as_view()),
+         name='cart_fill_in_order'),
 ]

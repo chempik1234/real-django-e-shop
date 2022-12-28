@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="card">
+    <div class="card-body">
+        <h2 class="card-title"><strong>Покупатель:</strong> {{user.username}}</h2>
+        <a href="/logout" class="btn btn-link card-text">Выйти</a>
+        <div class="container-fluid">
+            <div class="form-group">
+                <label for="name">Имя</label>
+                <input id="name" class="form-control" type="text" placeholder="{{user.first_name}}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="surname">Фамилия</label>
+                <input id="surname" class="form-control" type="text" placeholder="{{user.last_name}}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="email">Электронная почта</label>
+                <input id="email" class="form-control" type="text" placeholder="{{user.email}}" readonly>
+            </div>
+        </div>
+        <h2 class="card-title"><strong>Сумма:</strong> {{price}} ₽</h2>
+        <form action="" method="post">
+            {% csrf_token %}
+            <!--
+            <div class="form-group">
+                <label class="col col-form-label" for="id_deliever_or_pickup">Способ получения:</label>
+                <select name="deliever_or_pickup" id="id_deliever_or_pickup">
+                    <option value="True">Доставка</option>
+                    <option value="False">Самовывоз</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="col col-form-label" for="id_cash_or_card">Способ оплаты</label>
+                <select name="cash_or_card" id="id_cash_or_card">
+                    <option value="True">Наличные</option>
+                    <option value="False">Карта</option>
+                </select>
+            </div>-->
+
+            <label>Способ получения</label>
+            <div class="radio-btn-group w-100 d-flex" id="id_deliever_or_pickup">
+                <label class="radio-btn" for="id_deliever_or_pickup_0">
+                    <input type="radio" name="deliever_or_pickup" value="True" required="" id="id_deliever_or_pickup_0">
+                    <span>Доставка</span>
+                </label>
+                <label class="radio-btn" for="id_deliever_or_pickup_1">
+                    <input type="radio" name="deliever_or_pickup" value="False" required="" id="id_deliever_or_pickup_1">
+                    <span>Самовывоз</span>
+                </label>
+            </div>
+            <label>Способ оплаты</label>
+            <div class="radio-btn-group w-100 d-flex" id="id_cash_or_card">
+                <label class="radio-btn" for="id_cash_or_card_0">
+                    <input type="radio" name="cash_or_card" value="True" required="" id="id_cash_or_card_0">
+                    <span>Наличные</span>
+                </label>
+                <label class="radio-btn" for="id_cash_or_card_1">
+                    <input type="radio" name="cash_or_card" value="False" required="" id="id_cash_or_card_1">
+                    <span>Карта</span>
+                </label>
+            </div>
+
+            {% for error in field.errors %}
+            <div class="alert alert-danger">{{ error }}</div>
+            {% endfor %}
+
+            <input type="submit" value="Завершить" class="btn btn-warning">
+        </form>
+    </div>
+</div>
+{% endblock %}

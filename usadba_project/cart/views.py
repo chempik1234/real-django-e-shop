@@ -1,8 +1,12 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_POST
 from usadba_app.models import STRING_TO_TABLE
-from .cart import Cart
-from .forms import CartAddProductForm
+from rest_framework.views import APIView
+from rest_framework.renderers import TemplateHTMLRenderer
+from django.contrib.auth.decorators import login_required
+from rest_framework.response import Response
+from .cart import Cart, DIVIDER
+from .forms import CartAddProductForm, OrderFillForm
 SEED_CATEGORIES = {'Помидоры': 'Tomato',
                    'Огурцы': 'Cucumber',
                    'Морковь': 'Carrot',
@@ -65,4 +69,24 @@ def cart_detail(request):
                                                                    'update': True})
     CONTEXT = DEFAULT_CONTEXT.copy()
     CONTEXT["cart"] = cart
+    CONTEXT["title"] = str(cart.get_total_price()) + "р (корзина)"
+    CONTEXT["main_title"] = "Корзина"
     return render(request, 'cart/detail.html', context=CONTEXT)
+
+
+class Order(APIView):
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'cart/order.html'
+
+    def get(self, request):
+        cart = Cart(request)
+        # for item in cart:
+        #     item['update_quantity_form'] = CartAddProductForm(initial={'quantity': item['quantity'],
+        #                                 'update': True})
+        form = OrderFillForm()
+        CONTEXT = DEFAULT_CONTEXT.copy()
+        CONTEXT["form"] = form
+        CONTEXT["price"] = cart.get_total_price()
+        CONTEXT["title"] = str(cart.get_total_price()) + "р (заказ)"
+        CONTEXT["main_title"] = "Оформление заказа"
+        return Response(CONTEXT)

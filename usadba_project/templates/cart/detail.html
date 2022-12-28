@@ -7,6 +7,7 @@
         {% csrf_token %}
         <input type="submit" value="Очистить корзину полностью" class="btn btn-warning">
     </form>
+    <a href="order" class="btn btn-primary">Купить</a>
     {% with dict=cart.cart %}
     <table class="bucket-table">
         <thead>
