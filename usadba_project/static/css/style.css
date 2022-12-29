@@ -1,6 +1,9 @@
 body {
     background-color: #F5F5F5;
 }
+.max-width-100 {max-width:100px;}
+.min-width-300 {min-width: 300px !important;}
+.min-width-500 {min-width: 500px !important;}
 
 .radio-btn-group {
 	display: inline-block;
@@ -70,29 +73,57 @@ body {
     text-align: center;
     background: white;
     border-radius: 5px;
+    border: 1px solid darkgreen;
 }
 .num-list__item {
     display: table;
     font-size: 18px;
-    min-height: 100px;
-    margin-bottom: 20px;
+    min-height: 120px;
+    padding: 10px;
+    border: 1px solid green;
+	position: relative;
+    border-bottom: 0;
+    line-height: 150%;
+    width: 100%;
+}
+.num-list__item:first-child {
+    border-radius: 10px 10px 0 0;
+}
+.num-list__item:last-child {
+    border-radius: 0 0 10px 10px;
+    border-bottom: 1px solid green;
 }
 .num-list__item:before {
+    width: 10%;
     counter-increment: li;
     content: counter(li,decimal-leading-zero);
     display: table-cell;
-    padding-right: 70px;
+    padding-right: 30px;
     font-size: 50px;
     line-height: 0;
     color: lightgray;
     position: relative;
-    top: 60px;
+    top: 50px;
     font-weight: 600;
+}
+.num-list__item:after {
+    content: "";
+    display: block;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #276cc3;
+    border: 5px solid #e7ecf3;
+    position: absolute;
+    top: 50px;
+    left: 70px;
 }
 .num-list {
     position: relative;
     counter-reset: li;
     overflow: hidden;
+    margin-top: 20px;
+	padding: 0;
 }
 .num-list:before {
     content: "";
@@ -102,7 +133,6 @@ body {
     height: 100%;
     background: #e7ecf3;
     top: 55px;
-    left: 140px;
 }
 .down-ellipse {
     clip-path: ellipse(100% 60% at 50% 40%);

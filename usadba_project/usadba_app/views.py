@@ -335,6 +335,23 @@ def profile(request):
     data_context["title"] = "Профиль"
     data_context["main_title"] = "Профиль"
     current_user = request.user
+    orders = Orders.objects.filter(user_id=current_user)
+    if orders.exists():
+        orders_d = []
+        for i in orders:
+            products = OrderToProduct.objects.filter(order_id=i)
+            if products.exists():
+                cur, price = [], 0
+                for otp in products:
+                    product = STRING_TO_TABLE[remove_underlines(otp.product_db_table)].objects.filter(id=otp.product_id)
+                    if product.exists():
+                        product = product.first()
+                        cur.append({"product": product,
+                                    "price": product.price,
+                                    "quantity": otp.quantity})
+                        price += product.price
+                orders_d.append({"price": price, "products": cur})
+        data_context["orders"] = orders_d
     user_info = [("Имя", current_user.first_name),
                  ("Фамилия", current_user.last_name),
                  ("Логин / Почта", current_user.email),

@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-    <div class="card custom-form" style="width: 500px">
+    <div class="card custom-form min-width-300" style="width: 500px">
         <div class="card-body">
             <h1 class="font-weight-bold">{{username}}</h1>
             {% for i, j in user_info %}
@@ -11,4 +11,27 @@
             {% endfor %}
         </div>
     </div>
+    {% if orders %}
+    <section class="w-100 margin-top-50 round-border-padding min-width-300 bg-secondary">
+        <div class="div-margin-minus-50">
+            <h4>Заказы</h4>
+        </div>
+        {% for i in orders %}
+        <section class="shadow round-border-padding">
+            <h3 class="text-success">Цена: <strong>{{i.price}} ₽</strong></h3>
+            <ul class="num-list">
+                {% for product in i.products %}
+                <li class="reveal fade-left num-list__item">
+                    <img class="max-width-100 border" src="{{product.product.image.url}}">
+                    <h4 class="text-primary">{{product.product.title}}</h4>
+                    <p class="form-control">{{product.price}} ₽</p>
+                    <h4 class="text-primary">Количество</h4>
+                    <p class="form-control text-secondary">{{product.quantity}}</p>
+                </li>
+                {% endfor %}
+            </ul>
+        </section>
+        {% endfor %}
+    </section>
+    {% endif %}
 {% endblock %}
