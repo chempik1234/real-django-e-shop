@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="card">
+    <div class="card-body">
+        {% if order %}
+        <h2 class="card-title">Заказ с номером <strong>{{id}}</strong> успешно оформлен!</h2>
+        <a href="/" class="btn btn-link card-text">Главная</a>
+        <div class="container-fluid">
+            <div class="form-group">
+                <label for="name">Имя</label>
+                <input id="name" class="form-control" type="text" placeholder="{{user.first_name}}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="surname">Фамилия</label>
+                <input id="surname" class="form-control" type="text" placeholder="{{user.last_name}}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="email">Электронная почта</label>
+                <input id="email" class="form-control" type="text" placeholder="{{user.email}}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="deliver">Способ получения</label>
+                <input id="deliver" class="form-control" type="text" placeholder="{% if order.is_deliver %}Доставка{% else %}Самовывоз{% endif %}" readonly>
+            </div>
+        </div>
+        {% else %}
+        <h2 class="card-title">Заказа с номером <strong>{{id}}</strong> не существует, проверьте ссылку!</h2>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

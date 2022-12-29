@@ -3,10 +3,14 @@ from django.views.decorators.http import require_POST
 from usadba_app.models import STRING_TO_TABLE
 from rest_framework.views import APIView
 from rest_framework.renderers import TemplateHTMLRenderer
+from django.core.exceptions import ValidationError
 from django.contrib.auth.decorators import login_required
 from rest_framework.response import Response
+from django.http import HttpResponseRedirect
 from .cart import Cart, DIVIDER
+from usadba_app.models import Orders, OrderToProduct
 from .forms import CartAddProductForm, OrderFillForm
+from django.contrib import messages
 SEED_CATEGORIES = {'Помидоры': 'Tomato',
                    'Огурцы': 'Cucumber',
                    'Морковь': 'Carrot',
@@ -29,6 +33,15 @@ def remove_underlines(string):
             res += string[i].upper()
         else:
             res += string[i]
+    return res
+
+
+def add_underlines(string):
+    res = string[0].lower()
+    for i in range(1, len(string)):
+        if string[i].isupper():
+            res += "_"
+        res += string[i].lower()
     return res
 
 
@@ -74,12 +87,15 @@ def cart_detail(request):
     return render(request, 'cart/detail.html', context=CONTEXT)
 
 
-class Order(APIView):
+class OrderView(APIView):
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'cart/order.html'
 
     def get(self, request):
         cart = Cart(request)
+        if cart.is_empty():
+            messages.error(request, "Корзина пуста")
+            return HttpResponseRedirect('/')
         # for item in cart:
         #     item['update_quantity_form'] = CartAddProductForm(initial={'quantity': item['quantity'],
         #                                 'update': True})
@@ -90,3 +106,48 @@ class Order(APIView):
         CONTEXT["title"] = str(cart.get_total_price()) + "р (заказ)"
         CONTEXT["main_title"] = "Оформление заказа"
         return Response(CONTEXT)
+
+    def post(self, request):
+        post = OrderFillForm(request.POST)
+        if post.is_valid():
+            is_cash = post.cleaned_data.get('cash_or_card')
+            is_deliver = post.cleaned_data.get('deliever_or_pickup')
+            order = Orders()
+            order.user_id = request.user
+            order.is_deliver = is_deliver
+            order.is_cash = is_cash
+            try:
+                order.clean()
+                order.save()
+                cart = Cart(request)
+                if cart.is_empty():
+                    messages.error(request, "Корзина пуста")
+                    return HttpResponseRedirect('/')
+                for i in cart:
+                    pr_type, pr_id, quantity = i["product_type"], i['product'].id, i['quantity']
+                    otp = OrderToProduct()
+                    otp.order_id = order
+                    otp.product_id = pr_id
+                    otp.product_db_table = add_underlines(pr_type)
+                    otp.quantity = quantity
+                    otp.save()
+                    print(otp)
+                cart.clear()
+                return HttpResponseRedirect("order_success/" + str(order.id))
+            except ValidationError as err:
+                # CONTEXT = DEFAULT_CONTEXT.copy()
+                messages.error(request, err.message)
+        return self.get(request)
+
+
+def order_success(request, order_id):
+    CONTEXT = DEFAULT_CONTEXT.copy()
+    CONTEXT["main_title"] = "Завершение"
+    CONTEXT["title"] = "Завершение оформления заказа"
+    order = Orders.objects.filter(id=order_id)
+    if order.exists():
+        CONTEXT["order"] = order
+    else:
+        CONTEXT["order"] = None
+    CONTEXT["id"] = order_id
+    return render(request, 'cart/order_success.html', context=CONTEXT)

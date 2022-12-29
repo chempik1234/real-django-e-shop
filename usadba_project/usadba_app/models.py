@@ -5,6 +5,22 @@ from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 from django.core.validators import MaxValueValidator, MinValueValidator
+from django.core.exceptions import ValidationError
+
+
+def check_float(string):
+    if string.is_digit():
+        return True
+    not_digit_symbs, not_digit_symbol = 0, ''
+    for i in string:
+        if not i.is_digit():
+            not_digit_symbs += 1; not_digit_symbol = i
+    if not_digit_symbs > 1:
+        return False
+    if not_digit_symbol == '.':
+        if string.index(not_digit_symbol) > 0:
+            return False
+        return True
 
 # Create your models here.
 
@@ -60,6 +76,23 @@ class Orders(models.Model):
     is_deliver = models.BooleanField()
     is_cash = models.BooleanField()
     has_been_paid = models.BooleanField(default=False)
+    where_to_deliver_coords_comma = models.CharField(null=True, max_length=100)
+
+    def clean(self):
+        if self.where_to_deliver_coords_comma:
+            if len(self.where_to_deliver_coords_comma) >= 3 and ',' in self.where_to_deliver_coords_comma and ' ' not in self.where_to_deliver_coords_comma and \
+                    check_float(self.where_to_deliver_coords_comma[: self.where_to_deliver_coords_comma.index(',')]) and \
+                    check_float(self.where_to_deliver_coords_comma[self.where_to_deliver_coords_comma.index(',') + 1:]):
+                pass
+            else:
+                raise ValidationError("Неправильный формат координат доставки, введённые данные:" +
+                                      str(self.where_to_deliver_coords_comma))
+        elif self.is_deliver == True and (not self.where_to_deliver_coords_comma or
+                self.where_to_deliver_coords_comma is None):
+            raise ValidationError("Если выбрана доставка, то надо указать место")
+        elif self.is_deliver == True and self.is_cash == True:
+            raise ValidationError("Если выбрана доставка, то нельзя выбрать оплату наличными")
+        super().clean()
 
     class Meta:
         db_table = "orders"
@@ -69,6 +102,7 @@ class OrderToProduct(models.Model):
     order_id = models.ForeignKey(Orders, on_delete=models.CASCADE)
     product_id = models.IntegerField(validators=[MinValueValidator(1)])
     product_db_table = models.CharField(max_length=30)
+    quantity = models.IntegerField(default=1, validators=[MinValueValidator(1)])
 
     class Meta:
         db_table = "order_to_product"

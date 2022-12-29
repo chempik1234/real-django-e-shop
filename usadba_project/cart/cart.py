@@ -96,3 +96,9 @@ class Cart(object):
         # очищаем корзину в сессии
         del self.session[settings.CART_SESSION_ID]
         self.save()
+
+    def is_empty(self):
+        if not self.cart:
+            return True
+        else:
+            return False

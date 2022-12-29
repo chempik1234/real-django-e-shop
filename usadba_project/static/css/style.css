@@ -19,7 +19,7 @@ body {
     width: 100%;
 }
 .radio-btn-group label span {
-    min-height: 100px;
+    min-height: 50px;
     width: 100%;
 }
 .radio-btn-group label:first-child span {
@@ -31,7 +31,8 @@ body {
 }
 .radio-btn-group input[type=radio]:checked + span {
 	background: limegreen;
-    color: white
+    color: white;
+    font-size: 24px;
 }
 /*.checkbox-btn {
 	display: inline-block;

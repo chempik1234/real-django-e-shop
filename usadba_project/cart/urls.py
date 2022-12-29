@@ -16,6 +16,9 @@ urlpatterns = [
          views.cart_clear,
          name='cart_clear'),
     path('order/',
-         login_required(views.Order.as_view()),
+         login_required(views.OrderView.as_view()),
          name='cart_fill_in_order'),
+    path('order/order_success/<int:order_id>',
+         login_required(views.order_success),
+         name='order_success')
 ]
