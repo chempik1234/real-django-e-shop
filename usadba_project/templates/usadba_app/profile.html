@@ -19,6 +19,7 @@
         {% for i in orders %}
         <section class="shadow round-border-padding">
             <h3 class="text-success">Цена: <strong>{{i.price}} ₽</strong></h3>
+            <h4 class="text-primary">{{i.datetime}}</h4>
             <ul class="num-list">
                 {% for product in i.products %}
                 <li class="reveal fade-left num-list__item">

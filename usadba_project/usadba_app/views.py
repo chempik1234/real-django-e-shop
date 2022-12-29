@@ -350,7 +350,7 @@ def profile(request):
                                     "price": product.price,
                                     "quantity": otp.quantity})
                         price += product.price
-                orders_d.append({"price": price, "products": cur})
+                orders_d.append({"price": price, "products": cur, "datetime": i.date_created})
         data_context["orders"] = orders_d
     user_info = [("Имя", current_user.first_name),
                  ("Фамилия", current_user.last_name),

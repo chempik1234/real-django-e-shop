@@ -9,18 +9,18 @@ from django.core.exceptions import ValidationError
 
 
 def check_float(string):
-    if string.is_digit():
+    if string.isdigit():
         return True
     not_digit_symbs, not_digit_symbol = 0, ''
     for i in string:
-        if not i.is_digit():
+        if not i.isdigit():
             not_digit_symbs += 1; not_digit_symbol = i
     if not_digit_symbs > 1:
         return False
     if not_digit_symbol == '.':
         if string.index(not_digit_symbol) > 0:
-            return False
-        return True
+            return True
+        return False
 
 # Create your models here.
 

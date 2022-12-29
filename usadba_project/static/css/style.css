@@ -5,6 +5,8 @@ body {
 .min-width-300 {min-width: 300px !important;}
 .min-width-500 {min-width: 500px !important;}
 
+.map {width: 100%; min-height: 200px;}
+
 .radio-btn-group {
 	display: inline-block;
 }
@@ -134,30 +136,24 @@ body {
     background: #e7ecf3;
     top: 55px;
 }
-.down-ellipse {
-    clip-path: ellipse(100% 60% at 50% 40%);
-}
-.inner-padding div {
-    padding: 5px;
-}
-.text-shadow-lg {
-    text-shadow: 0 1px 10px black;
-}
-.icon {
-    width: 100px;
-}
-.address-map {
-    width: 500px;
-}
-.row-of-div {
-    display: flex;
-}
+
+.down-ellipse {clip-path: ellipse(100% 60% at 50% 40%);}
+
+.inner-padding div {padding: 5px;}
+
+.text-shadow-lg {text-shadow: 0 1px 10px black;}
+.icon {width: 100px;}
+.address-map {width: 500px;}
+
+.row-of-div {display: flex;}
 .row-of-div:not(:last-child){
     margin-right: 30px;
 }
+
 .bg-tree {
   background: url(/static/img/general/tree.png) no-repeat;
 }
+
 .landing-lg {
     display: flex;
     flex-wrap: wrap;
@@ -197,6 +193,7 @@ body {
     border: 5px solid gold;
     border-radius: 50%;
 }
+
 .round-border-padding {
     border: 1px solid green;
     border-radius: 10px;
@@ -204,6 +201,7 @@ body {
     padding: 20px;
     background-color: white;
 }
+
 .horizontal-center{
     margin-left: auto;
     margin-right: auto;
@@ -223,6 +221,7 @@ body {
 .both-center {
     margin: auto;
 }
+
 .btm-margin-0 {
     margin-top: auto;
     margin-bottom: 0;
@@ -234,6 +233,7 @@ body {
 .all-margin-0 {
     margin: 0;
 }
+
 .gradient-0 {
     background: rgb(2,0,36);
     /* background: linear-gradient(140deg, rgba(150,150,75,1) 0%, rgba(20,120,20,1) 20%, rgba(20,150,50,1) 58%, rgba(9,100,0,1) 100%); */
@@ -243,6 +243,7 @@ body {
     background: rgb(150,0,180);
     background: linear-gradient(140deg, rgba(130,40,130,1) 0%, rgba(200,50,255,1) 50%, rgba(255,100,150,1) 100%);
 }
+
 .messages {
     vertical-align: top;
     z-index: 999;
@@ -351,13 +352,9 @@ body {
     width:100%;
 }
 
-.vertical-div {
-    flex-wrap: wrap;
-}
+.vertical-div {flex-wrap: wrap;}
 
-.bucket {
-    width: 50px;
-}
+.bucket {width: 50px;}
 
 .nav-btn {
     border-left: solid white 2px;
@@ -380,9 +377,7 @@ body {
     color: green;
 }
 
-.top-bar {
-    margin: 10px;
-}
+.top-bar {margin: 10px;}
 
 .top-bar-inner {
     border-right: 1px solid green;

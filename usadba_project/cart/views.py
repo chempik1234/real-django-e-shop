@@ -112,10 +112,13 @@ class OrderView(APIView):
         if post.is_valid():
             is_cash = post.cleaned_data.get('cash_or_card')
             is_deliver = post.cleaned_data.get('deliever_or_pickup')
+            coords = post.cleaned_data.get('location')
             order = Orders()
             order.user_id = request.user
             order.is_deliver = is_deliver
             order.is_cash = is_cash
+            if coords:
+                order.where_to_deliver_coords_comma = coords
             try:
                 order.clean()
                 order.save()
@@ -131,7 +134,6 @@ class OrderView(APIView):
                     otp.product_db_table = add_underlines(pr_type)
                     otp.quantity = quantity
                     otp.save()
-                    print(otp)
                 cart.clear()
                 return HttpResponseRedirect("order_success/" + str(order.id))
             except ValidationError as err:
