@@ -5,6 +5,19 @@ body {
 .min-width-300 {min-width: 300px !important;}
 .min-width-500 {min-width: 500px !important;}
 
+
+.my-cards-container {
+    width: 100%;
+    display: inline-block;
+}
+@media screen and (min-width: 576px){
+    .my-cards-container {
+        display: flex;
+        flex-wrap: wrap;
+		gap: 10px;
+    }
+}
+
 .map {width: 100%; min-height: 200px;}
 
 .radio-btn-group {
@@ -369,6 +382,9 @@ body {
     padding: 10px;
     border-radius: 25px;
     background: #EFFFEF;
+}
+@media screen and (max-width: 576px) {
+    .left-bar {width: 100%}
 }
 
 .left-bar-inner {

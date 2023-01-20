@@ -59,34 +59,19 @@
       {% endwith %}
     </div>
     <h1 class="main-title">{{main_title}}</h1>
-    <main role="main" class="container-fluid wrapper">
-      <div class="left-bar">
+    <main role="main" class="d-sm-flex">
+      <aside class="left-bar float-left">
         <ul class="left-bar-inner">
           <li><h2>Семена</h2></li>
           {% for i, j in seed_categories.items %}
           <li><a href="/product/{{j}}Seeds">{{i}}</a></li>
           {% endfor %}
         </ul>
-      </div>
+      </aside>
       {% block content %}{% endblock %}
     </main>
-    <footer class="main-footer footer_">
-      <table width="100%" class="footer-text text-150">
-        <thead class="footer-table-header"><tr><th>О нас</th></tr></thead>
-        <tbody>
-        <tr>
-          <th>Адрес</th>
-          <th>Обратная связь</th>
-        </tr>
-        <tr>
-          <td>
-            <p>респ. Башкортостан, г.Октябрьский, ул. Садовое Кольцо, д. 51/1</p>
-            <img class="address-map" src="http://static-maps.yandex.ru/1.x/?ll=53.468527,54.488768&z=18&l=sat,skl&pt=54.488970,53.467995,pm2gnm1">
-          </td>
-          <td><p>8-800-555-35-35</p><p>theresnoscam@yandex.ru</p></td>
-        </tr>
-        </tbody>
-      </table>
+    <footer class="bg-dark">
+      <h1>jfkdjfk</h1>
     </footer>
   </body>
 </html>
