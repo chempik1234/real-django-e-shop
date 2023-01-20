@@ -5,17 +5,34 @@ body {
 .min-width-300 {min-width: 300px !important;}
 .min-width-500 {min-width: 500px !important;}
 
+.show-on-pc {}
+@media screen and (max-width: 576px){
+    .show-on-pc {display: none}
+}
 
+.show-on-mobile {}
 .my-cards-container {
     width: 100%;
     display: inline-block;
 }
 @media screen and (min-width: 576px){
+    .show-on-mobile {display: none}
     .my-cards-container {
         display: flex;
         flex-wrap: wrap;
 		gap: 10px;
     }
+}
+
+.my-dropdown {
+    position: fixed;
+    width: 100%;
+    left: 0;
+    top: 0;
+    border: 1px solid green;
+    padding: 10px;
+    border-radius: 25px;
+    background: #EFFFEF;
 }
 
 .map {width: 100%; min-height: 200px;}
@@ -397,7 +414,7 @@ body {
 
 .top-bar-inner {
     border-right: 1px solid green;
-    padding: 0px 25px;
+    padding: 0px 10px;
     margin: 5px;
 }
 

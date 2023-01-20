@@ -17,11 +17,12 @@
     <link rel="stylesheet" type="text/css" href="{%static 'css/rating-bar.css'%}"/>
     <link rel="stylesheet" type="text/css" href="{%static 'css/animation.css'%}"/>
     <script src="{% static 'js/reveal.js' %}"></script>
+    <script src="{% static 'js/close_button.js' %}"></script>
     <title>{{title}}</title>
   </head>
   <body>
     <header>
-      <nav class="navbar navbar-dark" style="background-color: #00DD00;">
+      <nav class="show-on-pc navbar navbar-dark" style="background-color: #00DD00;">
         <a class="navbar-title" href="/"><h1>Магазин "Усадьба"</h1></a>
         <a class="nav-btn" href="/about">О нас</a>
         {% if user.is_authenticated %}
@@ -34,6 +35,47 @@
         </a>
         {% endif %}
       </nav>
+      <nav class="show-on-mobile navbar navbar-dark" style="background-color: #00DD00;">
+        <img class="main-logo" src="/static/img/logo.png">
+        <div class="btn-group">
+          <button class="btn btn-primary dropdown-toggle"
+                  type="button" id="dropdownMenuCatalogue" data-toggle="dropdown"
+                  aria-haspopup="true" aria-expanded="false">
+            Каталог
+          </button>
+          <div class="dropdown-menu my-dropdown">
+            <button type="button" class="close" aria-label="Close" onclick="close_button_function">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <a class="text-secondary dropdown-item-text">Семена</a>
+            <div class="dropdown-divider"></div>
+            {% for i, j in seed_categories.items %}
+            <a class="dropdown-item" href="/product/{{j}}Seeds">{{i}}</a>
+            {% endfor %}
+          </div>
+        </div>
+        <div class="btn-group">
+          <button class="btn btn-primary dropdown-toggle"
+                  type="button" id="dropdownMenu" data-toggle="dropdown"
+                  aria-haspopup="true" aria-expanded="false">
+            &#9776;
+          </button>
+          <div class="dropdown-menu my-dropdown">
+            <button type="button" class="close" aria-label="Close" onclick="close_button_function">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <a class="dropdown-item" href="/about">О нас</a>
+            <div class="dropdown-divider"></div>
+            {% if user.is_authenticated %}
+            <a class="dropdown-item" href="/profile">{{ user.username }} ({{ user.first_name }} {{user.last_name}})</a>
+            <a class="dropdown-item" href="/logout">Выйти</a>
+            {% else %}
+            <a class="dropdown-item" href="/register">Зарегистрироваться</a>
+            <a class="dropdown-item" href="/login">Войти</a>
+            {% endif %}
+          </div>
+        </div>
+      </nav>
     </header>
     {% if messages %}
     <ul class="messages sticky-top">
@@ -43,7 +85,7 @@
     </ul>
     {% endif %}
     <div class="wrapper top-bar">
-      <img class="main-logo" src="/static/img/logo.png">
+      <img class="main-logo show-on-pc" src="/static/img/logo.png">
       <form action="/search" class="top-bar-inner align-self-center input-group">
         <input type="text" name="q" class="form-control" placeholder="" aria-label="" aria-describedby="basic-addon1">
         <div class="input-group-append">
@@ -60,7 +102,7 @@
     </div>
     <h1 class="main-title">{{main_title}}</h1>
     <main role="main" class="d-sm-flex">
-      <aside class="left-bar float-left">
+      <aside class="left-bar float-left show-on-pc">
         <ul class="left-bar-inner">
           <li><h2>Семена</h2></li>
           {% for i, j in seed_categories.items %}
