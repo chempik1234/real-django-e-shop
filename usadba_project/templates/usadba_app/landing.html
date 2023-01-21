@@ -18,8 +18,8 @@
   </head>
   <body>
     <header>
-      <nav class="navbar navbar-dark bg-dark">
-        <a class="navbar-title" href="/"><h1>Главная</h1></a>
+      <nav class="show-on-pc navbar bg-dark">
+        <a class="navbar-title" href="/"><h1>Магазин "Усадьба"</h1></a>
         <a class="nav-btn" href="/about">О нас</a>
         {% if user.is_authenticated %}
           <a class="navbar-brand" href="/profile">{{ user.username }} ({{ user.first_name }} {{user.last_name}})</a>
@@ -31,19 +31,60 @@
         </a>
         {% endif %}
       </nav>
+      <nav class="show-on-mobile navbar navbar-dark bg-dark">
+        <img class="main-logo" src="/static/img/logo.png">
+        <div class="btn-group">
+          <button class="btn btn-primary dropdown-toggle"
+                  type="button" id="dropdownMenuCatalogue" data-toggle="dropdown"
+                  aria-haspopup="true" aria-expanded="false">
+            Каталог
+          </button>
+          <div class="dropdown-menu my-dropdown">
+            <button type="button" class="close" aria-label="Close" onclick="close_button_function">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <a class="text-secondary dropdown-item-text">Семена</a>
+            <div class="dropdown-divider"></div>
+            {% for i, j in seed_categories.items %}
+            <a class="dropdown-item" href="/product/{{j}}Seeds">{{i}}</a>
+            {% endfor %}
+          </div>
+        </div>
+        <div class="btn-group">
+          <button class="btn btn-primary dropdown-toggle"
+                  type="button" id="dropdownMenu" data-toggle="dropdown"
+                  aria-haspopup="true" aria-expanded="false">
+            &#9776;
+          </button>
+          <div class="dropdown-menu my-dropdown">
+            <button type="button" class="close" aria-label="Close" onclick="close_button_function">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <a class="dropdown-item" href="/about">О нас</a>
+            <div class="dropdown-divider"></div>
+            {% if user.is_authenticated %}
+            <a class="dropdown-item" href="/profile">{{ user.username }} ({{ user.first_name }} {{user.last_name}})</a>
+            <a class="dropdown-item" href="/logout">Выйти</a>
+            {% else %}
+            <a class="dropdown-item" href="/register">Зарегистрироваться</a>
+            <a class="dropdown-item" href="/login">Войти</a>
+            {% endif %}
+          </div>
+        </div>
+      </nav>
     </header>
     <!--                                   -->
     <div class="gradient-0 down-ellipse">
       <div class="bg-tree bg-tree text-center landing-lg">
         <!-- Header -->
-        <div class="text-shadow-lg both-center d-inline-block" style="flex-basis: 60%">
+        <div class="text-shadow-lg both-center d-inline-block" style="@media screen and (min-width: 576px){flex-basis: 60%}">
           <h1 class="horizontal-center text-light btm-margin-0">Магазин "<span class="text-warning">Усадьба</span>"</h1>
           <h3 class="text-light horizontal-center w-100 top-margin-0">
             Мы продаём товары для сада и дома
           </h3>
         </div>
         <!-- Search -->
-        <div class="text-shadow-lg both-center" style="flex-basis: 60%">
+        <div class="text-shadow-lg both-center" style="@media screen and (min-width: 576px){flex-basis: 60%}">
           <div class="shadow-lg both-center border border-light border-bottom-0 container">
             <h3 class="text-center text-light btm-margin-0 horizontal-center">
               Какой товар вы ищете?
@@ -59,7 +100,7 @@
         </div>
         <!-- Sign in form -->
         {% if not user.is_authenticated %}
-        <div class="both-center text-left container reveal fade-left" style="flex-basis: 30%">
+        <div class="both-center text-left container reveal fade-left show-on-pc" style="@media screen and (min-width: 576px){flex-basis: 60%}">
           <h3 class="text-shadow-lg text-light btm-margin-0 text-center horizontal-left">Зарегистрируйтесь, чтобы делать покупки!</h3>
           <div class="card">
             <form class="card-body" method="post" action="/register">
