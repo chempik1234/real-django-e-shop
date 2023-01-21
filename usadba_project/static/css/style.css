@@ -353,13 +353,13 @@ body {
     width: 100%;
 }
 .bucket-table th {
-    border: 2px solid green;
+    /*border: 2px solid green;*/
     padding: 10px;
     background-color: #EEFFEE;
 }
 .bucket-table td {
-    border: 1px solid darkgreen;
-    padding: 10px;
+    border-bottom: 1px solid darkgreen;
+    padding: 5px;
     background-color: white;
 }
 .bucket-table img {

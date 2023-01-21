@@ -12,16 +12,13 @@
     <table class="bucket-table">
         <thead>
           <tr>
-            <th>Картинка</th>
-            <th>Название</th>
-            <th>Обновить кол-во</th>
-            <th>Убрать</th>
-            <th>Количество</th>
-            <th>Цена 1 штуки</th>
-            <th>Общая стоимость</th>
+            <th>Фото</th>
+            <th>Кол-во</th>
+            <th></th>
+            <th>Итого</th>
           </tr>
         </thead>
-        <tr>
+        <tbody>
         {% for i, item in dict.items %}
 
             {% with product=item.product %}
@@ -29,9 +26,9 @@
                 <td>
                   <a href="/product/{{item.product_type}}/{{product.id}}">
                     <img src="{% if product.image %}{{ product.image.url }}{% endif %}">
+                      <strong>{{ product.title }}</strong>
                   </a>
                 </td>
-                <td>{{ product.title }}</td>
                 <td>
                   <form action="{% url 'cart:cart_add' item.product_type product.id %}" method="post">
                       {% csrf_token %}
@@ -39,12 +36,8 @@
                       <input type="submit" value="Изменить" class="btn btn-secondary">
                   </form>
                 </td>
-                <td><a href="{% url 'cart:cart_remove' item.product_type product.id %}" class="btn btn-danger">Удалить</a></td>
-                <td>
-                  {{ item.quantity }}
-                </td>
-                <td class="num">{{ item.price }} ₽</td>
-                <td class="num">{{ item.total_price }} ₽</td>
+                <td><a href="{% url 'cart:cart_remove' item.product_type product.id %}" class="btn btn-danger">&#10006;</a></td>
+                <td class="num">{{ item.price }} ₽ * {{ item.quantity }} = {{ item.total_price }} ₽</td>
               </tr>
             {% endwith %}
         </tr>
