@@ -6,3 +6,4 @@ Pillow
 PIL
 cloudipsp
 djangorestframework
+mysqlclient

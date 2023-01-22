@@ -86,12 +86,12 @@ WSGI_APPLICATION = 'usadba_project.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'usadba_project/usadba_db',
-        #'USER': 'usadba_db_user',
-        #'PASSWORD': 'mypassword',
-        #'HOST': 'localhost',
-        #'PORT': '8000',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'Imfighter160$default',  # 'usadba_project/usadba_db',
+        'USER': 'Imfighter160',
+        'PASSWORD': 'my4518sql_#$%!',
+        'HOST': 'Imfighter160.mysql.pythonanywhere-services.com',   # Or an IP Address that your DB is hosted on
+        'PORT': '3306',
     }
 }
 
