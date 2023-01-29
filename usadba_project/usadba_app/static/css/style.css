@@ -174,7 +174,7 @@ body {
 
 .text-shadow-lg {text-shadow: 0 1px 10px black;}
 .icon {width: 80px;}
-.address-map {width: 100%;}
+.address-map {width: 100%;max-width:500px;}
 
 .row-of-div {display: flex;}
 .row-of-div:not(:last-child){
