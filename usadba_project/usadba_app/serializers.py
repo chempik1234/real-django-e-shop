@@ -31,6 +31,9 @@ class GroundGrowingConditionsSerializer(serializers.HyperlinkedModelSerializer):
         model = TomatoTypeOfPlant
         fields = ['name']
         lookup_field = 'name'
+
+
+non_seed_classes = [SeedsCategoriesSerializer, RipeningPeriodsSerializer, TomatoTypeOfPlantSerializer, GroundGrowingConditionsSerializer]
 ###############
 
 
