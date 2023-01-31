@@ -344,9 +344,10 @@ def profile(request):
     if orders.exists():
         orders_d = []
         for i in orders:
-            if Payment.find_one(i.yookassa_id).status == "succeeded":
-                i.has_been_paid = True
-                i.save()
+            if i.yookassa_id:
+                if Payment.find_one(i.yookassa_id).status == "succeeded":
+                    i.has_been_paid = True
+                    i.save()
             products = OrderToProduct.objects.filter(order_id=i)
             if products.exists():
                 cur, price = [], 0

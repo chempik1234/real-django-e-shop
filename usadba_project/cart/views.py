@@ -157,9 +157,10 @@ def order_success(request, order_id):
     order = Orders.objects.filter(id=order_id)
     if order.exists():
         order = order.first()
-        if Payment.find_one(order.yookassa_id).status == "succeeded":
-            order.has_been_paid = True
-            order.save()
+        if order.yookassa_id:
+            if Payment.find_one(order.yookassa_id).status == "succeeded":
+                order.has_been_paid = True
+                order.save()
         CONTEXT["order"] = {"products": [], "price": 0, "datetime": order.date_created,
                             "is_deliver": order.is_deliver, "has_been_paid": order.has_been_paid}
         for product in OrderToProduct.objects.filter(order_id=order):
