@@ -111,11 +111,16 @@ class OrderView(APIView):
         post = OrderFillForm(request.POST)
         if post.is_valid():
             is_cash = post.cleaned_data.get('cash_or_card')
-            is_deliver = post.cleaned_data.get('deliever_or_pickup')
+            print(post.cleaned_data)
+            is_deliver = post.cleaned_data.get('deliver_or_pickup')
             coords = post.cleaned_data.get('location')
             order = Orders()
             order.user_id = request.user
             order.is_deliver = is_deliver
+            if is_cash == "False":
+                is_cash = False
+            else:
+                is_cash = True
             order.is_cash = is_cash
             if coords:
                 order.where_to_deliver_coords_comma = coords
@@ -135,6 +140,8 @@ class OrderView(APIView):
                     otp.quantity = quantity
                     otp.save()
                 cart.clear()
+                if not is_cash:
+                    return HttpResponseRedirect('online_pay/' + str(order.id))
                 return HttpResponseRedirect("order_success/" + str(order.id))
             except ValidationError as err:
                 # CONTEXT = DEFAULT_CONTEXT.copy()
@@ -148,8 +155,18 @@ def order_success(request, order_id):
     CONTEXT["title"] = "Завершение оформления заказа"
     order = Orders.objects.filter(id=order_id)
     if order.exists():
-        CONTEXT["order"] = order
+        order = order.first()
+        CONTEXT["order"] = {"products": [], "price": 0, "datetime": order.date_created,
+                            "is_deliver": order.is_deliver, "has_been_paid": order.has_been_paid}
+        for product in OrderToProduct.objects.filter(order_id=order):
+            product_model_object = get_object_or_404(STRING_TO_TABLE[remove_underlines(product.product_db_table)],
+                                                     id=product.product_id)
+            CONTEXT["order"]["products"].append({"product": product_model_object,
+                                                 "quantity": product.quantity})
+            CONTEXT["order"]["price"] += product_model_object.price
+            print(CONTEXT["order"])
     else:
         CONTEXT["order"] = None
+
     CONTEXT["id"] = order_id
     return render(request, 'cart/order_success.html', context=CONTEXT)

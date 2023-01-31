@@ -20,14 +20,3 @@ DG.then(function () {
         locationInfo.value = lat + ',' + lng;
     });
 });
-
-$('input[type="radio"]').click(function () {
-    if ($(this).attr("name") == "deliever_or_pickup" && $(this).attr("value") == "False") {
-        $(".deliver_pickup_hide").hide('slow');
-    }
-    if ($(this).attr("name") == "deliever_or_pickup" && $(this).attr("value") == "True") {
-        $(".deliver_pickup_hide").show('slow');
-    }
-});
-
-$('input[type="radio"]').trigger('click');  // trigger the event

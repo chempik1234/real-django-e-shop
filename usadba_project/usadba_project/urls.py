@@ -41,6 +41,7 @@ urlpatterns = [
     path('product/<str:product_type>', ProductListView.as_view()),
     path('admin/', admin.site.urls),
     path('cart/', include('cart.urls', namespace='cart')),
+    path('usadba_test_payment/succeeded', test_payment_succeeded)
 ]
 
 if bool(settings.DEBUG):

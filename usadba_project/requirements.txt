@@ -7,3 +7,4 @@ PIL
 cloudipsp
 djangorestframework
 mysqlclient
+yookassa

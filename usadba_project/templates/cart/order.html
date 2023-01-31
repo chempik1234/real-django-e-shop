@@ -21,18 +21,18 @@
             </div>
         </div>
         <h2 class="card-title"><strong>Сумма:</strong> {{price}} ₽</h2>
-        <div id="map" class="deliver_pickup_hide map"></div>
+        <div id="map" class="deliver_or_pickup_hide_true map"></div>
         <form action="" method="post">
             {% csrf_token %}
             <input type="hidden" name="location" id="location">
             <label>Способ получения</label>
-            <div class="radio-btn-group w-100 d-flex" id="id_deliever_or_pickup">
-                <label class="radio-btn" for="id_deliever_or_pickup_0">
-                    <input type="radio" name="deliever_or_pickup" value="True" required="" id="id_deliever_or_pickup_0">
+            <div class="radio-btn-group w-100 d-flex" id="id_deliver_or_pickup">
+                <label class="radio-btn" for="id_deliver_or_pickup_0">
+                    <input type="radio" name="deliver_or_pickup" value="True" required="" id="id_deliver_or_pickup_0">
                     <span>Доставка</span>
                 </label>
-                <label class="radio-btn" for="id_deliever_or_pickup_1">
-                    <input type="radio" name="deliever_or_pickup" value="False" required="" id="id_deliever_or_pickup_1" checked>
+                <label class="radio-btn" for="id_deliver_or_pickup_1">
+                    <input type="radio" name="deliver_or_pickup" value="False" required="" id="id_deliver_or_pickup_1" checked>
                     <span>Самовывоз</span>
                 </label>
             </div>
@@ -52,9 +52,13 @@
             <div class="alert alert-danger">{{ error }}</div>
             {% endfor %}
 
-            <input type="submit" value="Завершить" class="btn btn-warning">
+
+
+            <a class="btn btn-primary text-white ">Оплатить онлайн</a> <!--cash_or_card_hide_false-->
+            <input class="btn btn-warning " type="submit" value="Завершить"> <!--cash_or_card_hide_true-->
         </form>
     </div>
 </div>
 <script src="{% static 'js/get_address_click_map.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/radio_buttons_as_tabs.js' %}" type="text/javascript"></script>
 {% endblock %}

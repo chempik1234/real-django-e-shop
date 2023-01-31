@@ -11,7 +11,7 @@ class CartAddProductForm(forms.Form):
                                 coerce=int)
 
 
-deliever_or_pickup_choices = (
+deliver_or_pickup_choices = (
         (True, 'Доставка'),
         (False, 'Самовывоз'),)
 cash_or_card_choices = (
@@ -20,8 +20,8 @@ cash_or_card_choices = (
 
 
 class OrderFillForm(forms.Form):
-    deliever_or_pickup = forms.ChoiceField(
-        widget=forms.RadioSelect,choices=deliever_or_pickup_choices)
+    deliver_or_pickup = forms.ChoiceField(
+        widget=forms.RadioSelect,choices=deliver_or_pickup_choices)
     cash_or_card = forms.ChoiceField(
         widget=forms.RadioSelect,choices=cash_or_card_choices)
     location = forms.CharField(required=False)
@@ -29,7 +29,7 @@ class OrderFillForm(forms.Form):
     def clean_location(self):
         location = self.cleaned_data['location']
         print("location", location)
-        if self.cleaned_data['deliever_or_pickup'] == True and not location:
+        if self.cleaned_data['deliver_or_pickup'] == True and not location:
             raise forms.ValidationError("Ошибка формы: если выбрана доставка, должно быть выбрано место.")
         if location:
             if location.find(',') <= 0 or location.find(',') >= len(location) - 1:

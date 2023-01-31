@@ -4,7 +4,7 @@
 <div class="card">
     <div class="card-body">
         {% if order %}
-        <h2 class="card-title">Заказ с номером <strong>{{id}}</strong> успешно оформлен!</h2>
+        <h2 class="card-title">Заказ с номером <strong>{{id}}</strong> успешно создан! Статус оплаты смотрите в профиле</h2>
         <a href="/" class="btn btn-link card-text">Главная</a>
         <div class="container-fluid">
             <div class="form-group">
@@ -23,6 +23,26 @@
                 <label for="deliver">Способ получения</label>
                 <input id="deliver" class="form-control" type="text" placeholder="{% if order.is_deliver %}Доставка{% else %}Самовывоз{% endif %}" readonly>
             </div>
+            <section class="shadow round-border-padding">
+                {% if order.has_been_paid %}
+                <h1 class="green-neon-text">&#10004; Заказ оплачен</h1>
+                {% else %}
+                <h1 class="red-neon-text">&#10006; Заказ не оплачен</h1>
+                {% endif %}
+                <h3 class="text-success">Цена: <strong>{{order.price}} ₽</strong></h3>
+                <h4 class="text-primary">{{order.datetime}}</h4>
+                <ul class="num-list">
+                    {% for product in order.products %}
+                    <li class="reveal fade-left num-list__item">
+                        <img class="max-width-100 border" src="{{product.product.image.url}}">
+                        <h4 class="text-primary">{{product.product.title}}</h4>
+                        <p class="form-control">{{product.product.price}} ₽</p>
+                        <h4 class="text-primary">Количество</h4>
+                        <p class="form-control text-secondary">{{product.quantity}}</p>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </section>
         </div>
         {% else %}
         <h2 class="card-title">Заказа с номером <strong>{{id}}</strong> не существует, проверьте ссылку!</h2>
