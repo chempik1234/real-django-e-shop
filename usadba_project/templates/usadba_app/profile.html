@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-    <div class="card custom-form min-width-300" style="width: 500px">
+    <div class="card custom-form min-width-300"> <!--style="width: 500px"-->
         <div class="card-body">
             <h1 class="font-weight-bold">{{username}}</h1>
             {% for i, j in user_info %}
@@ -18,6 +18,11 @@
         </div>
         {% for i in orders %}
         <section class="shadow round-border-padding">
+            {% if i.has_been_paid %}
+            <h1 class="green-neon-text">&#10004; Заказ оплачен</h1>
+            {% else %}
+            <h1 class="red-neon-text">&#10006; Заказ не оплачен</h1>
+            {% endif %}
             <h3 class="text-success">Цена: <strong>{{i.price}} ₽</strong></h3>
             <h4 class="text-primary">{{i.datetime}}</h4>
             <ul class="num-list">

@@ -348,9 +348,10 @@ def profile(request):
                         product = product.first()
                         cur.append({"product": product,
                                     "price": product.price,
-                                    "quantity": otp.quantity})
+                                    "quantity": otp.quantity,})
                         price += product.price
-                orders_d.append({"price": price, "products": cur, "datetime": i.date_created})
+                orders_d.append({"price": price, "products": cur, "datetime": i.date_created,
+                                 "has_been_paid": i.has_been_paid})
         data_context["orders"] = orders_d
     user_info = [("Имя", current_user.first_name),
                  ("Фамилия", current_user.last_name),
