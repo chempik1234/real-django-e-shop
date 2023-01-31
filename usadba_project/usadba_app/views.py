@@ -30,6 +30,11 @@ from django.template.loader_tags import register
 from django.contrib import messages
 
 from cloudipsp import Api, Checkout
+from yookassa import Payment, Configuration
+
+Configuration.account_id = '980187'
+Configuration.secret_key = 'test_4Kh13LvH8qXJrbsDtEM9O8rDPb1EVv4effgxYteZA2g'
+
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'bmp'}
 SEED_CATEGORIES = {'Помидоры': 'Tomato',
@@ -339,6 +344,9 @@ def profile(request):
     if orders.exists():
         orders_d = []
         for i in orders:
+            if Payment.find_one(i.yookassa_id).status == "succeeded":
+                i.has_been_paid = True
+                i.save()
             products = OrderToProduct.objects.filter(order_id=i)
             if products.exists():
                 cur, price = [], 0

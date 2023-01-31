@@ -157,8 +157,9 @@ def order_success(request, order_id):
     order = Orders.objects.filter(id=order_id)
     if order.exists():
         order = order.first()
-        if check_payment_status(order.yookassa_id) == "succeeded":
+        if Payment.find_one(order.yookassa_id).status == "succeeded":
             order.has_been_paid = True
+            order.save()
         CONTEXT["order"] = {"products": [], "price": 0, "datetime": order.date_created,
                             "is_deliver": order.is_deliver, "has_been_paid": order.has_been_paid}
         for product in OrderToProduct.objects.filter(order_id=order):
@@ -176,8 +177,3 @@ def order_success(request, order_id):
 
 Configuration.account_id = '980187'
 Configuration.secret_key = 'test_4Kh13LvH8qXJrbsDtEM9O8rDPb1EVv4effgxYteZA2g'
-
-
-def check_payment_status(payment_id):
-    payment = Payment.find_one(payment_id)
-    return payment.status
