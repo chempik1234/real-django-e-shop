@@ -11,7 +11,7 @@ from .cart import Cart, DIVIDER
 from usadba_app.models import Orders, OrderToProduct
 from .forms import CartAddProductForm, OrderFillForm
 from django.contrib import messages
-from yookassa import Payment
+from yookassa import Payment, Configuration
 SEED_CATEGORIES = {'Помидоры': 'Tomato',
                    'Огурцы': 'Cucumber',
                    'Морковь': 'Carrot',
@@ -172,6 +172,10 @@ def order_success(request, order_id):
 
     CONTEXT["id"] = order_id
     return render(request, 'cart/order_success.html', context=CONTEXT)
+
+
+Configuration.account_id = '980187'
+Configuration.secret_key = 'test_4Kh13LvH8qXJrbsDtEM9O8rDPb1EVv4effgxYteZA2g'
 
 
 def check_payment_status(payment_id):
