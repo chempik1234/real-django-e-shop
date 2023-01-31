@@ -176,4 +176,4 @@ def order_success(request, order_id):
 
 def check_payment_status(payment_id):
     payment = Payment.find_one(payment_id)
-    return payment["status"]
+    return payment.status
