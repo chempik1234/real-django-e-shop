@@ -70,4 +70,6 @@ class YooPayment(View):
             "description": "Тестовый заказ"
         }, uuid.uuid4())
           # "payment_id": "215d8da0-000f-50be-b000-0003308c89be"
+        dat_order.yookassa_id = payment.id
+        dat_order.save()
         return HttpResponseRedirect(payment.confirmation.confirmation_url)

@@ -77,6 +77,7 @@ class Orders(models.Model):
     is_cash = models.BooleanField()
     has_been_paid = models.BooleanField(default=False)
     where_to_deliver_coords_comma = models.CharField(null=True, max_length=100)
+    yookassa_id = models.CharField(null=True, max_length=36 + 4)
 
     def clean(self):
         if self.where_to_deliver_coords_comma:

@@ -11,6 +11,7 @@ from .cart import Cart, DIVIDER
 from usadba_app.models import Orders, OrderToProduct
 from .forms import CartAddProductForm, OrderFillForm
 from django.contrib import messages
+from yookassa import Payment
 SEED_CATEGORIES = {'Помидоры': 'Tomato',
                    'Огурцы': 'Cucumber',
                    'Морковь': 'Carrot',
@@ -156,6 +157,8 @@ def order_success(request, order_id):
     order = Orders.objects.filter(id=order_id)
     if order.exists():
         order = order.first()
+        if check_payment_status(order.yookassa_id) == "succeeded":
+            order.has_been_paid = True
         CONTEXT["order"] = {"products": [], "price": 0, "datetime": order.date_created,
                             "is_deliver": order.is_deliver, "has_been_paid": order.has_been_paid}
         for product in OrderToProduct.objects.filter(order_id=order):
@@ -164,9 +167,13 @@ def order_success(request, order_id):
             CONTEXT["order"]["products"].append({"product": product_model_object,
                                                  "quantity": product.quantity})
             CONTEXT["order"]["price"] += product_model_object.price
-            print(CONTEXT["order"])
     else:
         CONTEXT["order"] = None
 
     CONTEXT["id"] = order_id
     return render(request, 'cart/order_success.html', context=CONTEXT)
+
+
+def check_payment_status(payment_id):
+    payment = Payment.find_one(payment_id)
+    return payment["status"]
