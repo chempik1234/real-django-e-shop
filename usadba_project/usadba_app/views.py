@@ -69,6 +69,15 @@ def remove_underlines(string):
     return res
 
 
+def add_underlines(string):
+    res = string[0].lower()
+    for i in range(1, len(string)):
+        if string[i].isupper():
+            res += "_"
+        res += string[i].lower()
+    return res
+
+
 def x_or_y_if_a(a, x, y):
     if a is None:
         return None
@@ -213,7 +222,7 @@ class Product(APIView):
                 some_rate = some_rate.first().rate
             else:
                 some_rate = 0
-            opinions.append([some_user.username, i.text, i.image, some_rate])
+            opinions.append([some_user.username, i.text, i.image, some_rate, i.proven])
         current_user = request.user
         if not opinions:
             opinions = None
@@ -320,12 +329,21 @@ class OpinionView(APIView):
         else:
             if post.is_valid():
                 current_user = request.user
-                text, file = post.cleaned_data.get('text'), post.cleaned_data.get('file')
+                text, file, uid = post.cleaned_data.get('text'), post.cleaned_data.get('file'),\
+                                  post.cleaned_data.get('order_unique_id')
                 op = Opinion()
                 op.user_id = current_user
                 op.text = text
                 op.pr_table = pr_table
                 op.pr_id = pr_id
+                dat_order = Orders.objects.filter(unique_id=uid)
+                dat_object = STRING_TO_TABLE[pr_table].objects.filter(id=pr_id)
+                if dat_order.exists() and dat_object.exists():
+                    otp_object = OrderToProduct.objects.filter(order_id=dat_order.first(),
+                                                               product_db_table=add_underlines(pr_table),
+                                                               product_id=pr_id)
+                    if otp_object.exists():
+                        op.proven = True
                 if file:
                     op.image = file
                 op.save()

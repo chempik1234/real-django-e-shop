@@ -7,6 +7,10 @@
             <h1>{{item_title}}</h1>
             {% csrf_token %}
             <div class="form-group">
+                <label class="col col-form-label">Номер заказа:</label>
+                <input name="order_unique_id" class="form-control" id="id_order_unique_id" placeholder="Введите текст">
+            </div>
+            <div class="form-group">
                 <label class="col col-form-label">Текст отзыва:</label>
                 <textarea name="text" class="form-control" required id="id_text" placeholder="Введите текст"></textarea>
             </div>

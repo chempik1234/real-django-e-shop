@@ -88,6 +88,9 @@
 <div>
     {% for item in opinions %}
     <div class="opinion">
+        {% if item.4 %}
+        <h4 class="green-neon-text">&#10004; Реальный покупатель</h4>
+        {% endif %}
         <h2>{{item.0}}</h2>
         {% if item.2 != '' and item.2 != None %}
         <img class="opinion_img" src="{{item.2.url}}" alt="Нет фото">

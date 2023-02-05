@@ -24,7 +24,7 @@ urlpatterns = [
     path('order/online_pay/<int:order_id>',
          login_required(yookassa.YooPayment.as_view()),
          name='online_pay'),
-    path('order/order_success/<int:order_id>',
+    path('order/order_success/<str:order_id>',
          login_required(views.order_success),
          name='order_success')
 ]

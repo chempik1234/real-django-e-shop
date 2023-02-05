@@ -4,6 +4,8 @@ from django.contrib.auth.forms import UserCreationForm
 
 
 class OpinionForm(forms.Form):
+    order_unique_id = forms.CharField(label="Номер заказа для подтверждения отзыва", min_length=1,
+                                      max_length=30, required=False)
     text = forms.CharField(label="Текст отзыва", min_length=1, max_length=400)
     file = forms.ImageField(label="Прикрепить фото", required=False)
     # field_order = ["age", "name", "email", "ads"]

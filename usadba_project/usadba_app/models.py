@@ -1,4 +1,5 @@
 from django.db import models
+from random import randint
 from django.urls import reverse
 import os
 from django.contrib.auth.models import User
@@ -22,6 +23,17 @@ def check_float(string):
             return True
         return False
 
+
+def create_random_string():
+    s, r = 'QWERTYUIOPASDFGHJKLZXCVBNM1234567890', ''
+    for i in range(30):
+        if i == 15:
+            r += '-'
+            continue
+        r += s[randint(0, len(s) - 1)]
+    return r
+
+
 # Create your models here.
 
 
@@ -39,6 +51,7 @@ class Opinion(models.Model):
     image = models.ImageField(null=True, blank=True, upload_to='opinion')
     pr_table = models.CharField(null=True,max_length=255)  # tomato_seeds
     pr_id = models.IntegerField(null=True)
+    proven = models.BooleanField(null=False, default=False)
 
     class Meta:
         db_table = "opinion"
@@ -78,6 +91,7 @@ class Orders(models.Model):
     has_been_paid = models.BooleanField(default=False)
     where_to_deliver_coords_comma = models.CharField(null=True, max_length=100)
     yookassa_id = models.CharField(null=True, max_length=36 + 4)
+    unique_id = models.CharField(unique=True, max_length=30, default=create_random_string)
 
     def clean(self):
         if self.where_to_deliver_coords_comma:

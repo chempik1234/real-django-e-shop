@@ -154,7 +154,7 @@ def order_success(request, order_id):
     CONTEXT = DEFAULT_CONTEXT.copy()
     CONTEXT["main_title"] = "Завершение"
     CONTEXT["title"] = "Завершение оформления заказа"
-    order = Orders.objects.filter(id=order_id)
+    order = Orders.objects.filter(unique_id=order_id)
     if order.exists():
         order = order.first()
         if order.yookassa_id:

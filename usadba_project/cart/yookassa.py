@@ -64,7 +64,8 @@ class YooPayment(View):
             },
             "confirmation": {
                 "type": "redirect",
-                "return_url": "https://imfighter160.pythonanywhere.com/cart/order/order_success/" + str(order_id)
+                "return_url": "https://imfighter160.pythonanywhere.com/cart/order/order_success/" +
+                              str(dat_order.unique_id)
             },
             "capture": True,
             "description": "Тестовый заказ"
