@@ -143,7 +143,7 @@ class OrderView(APIView):
                 cart.clear()
                 if not is_cash:
                     return HttpResponseRedirect('online_pay/' + str(order.id))
-                return HttpResponseRedirect("order_success/" + str(order.id))
+                return HttpResponseRedirect("order_success/" + str(order.unique_id))
             except ValidationError as err:
                 # CONTEXT = DEFAULT_CONTEXT.copy()
                 messages.error(request, err.message)
