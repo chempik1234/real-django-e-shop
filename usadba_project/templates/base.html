@@ -94,7 +94,7 @@
       </form>
       {% with total_items=cart|length total_price=cart.get_total_price %}
       <div class="top-bar-inner vertical-div">
-        <div class="text-uppercase">корзина<span class="badge badge-primary">{{total_items}}</span></div>
+        <p class="d-inline text-capitalize">корзина<span class="badge badge-primary">{{total_items}}</span></p>
         <a href="/cart"><img src="{% static 'img/general/bucket.png' %}" class="bucket"></a>
         <p>{{total_price}} ₽</p>
       </div>
