@@ -3,11 +3,11 @@
 {% block content %}
 <div class="vertical-div">
     <h2>Итого: {{cart.get_total_price}} ₽</h2>
-    <form action="{% url 'cart:cart_clear' %}" method="post">
+    <form action="{% url 'cart:cart_clear' %}" class="mb-1" method="post">
         {% csrf_token %}
         <input type="submit" value="Очистить корзину полностью" class="btn btn-warning">
     </form>
-    <a href="order" class="btn btn-primary">Купить</a>
+    <a href="order" class="mb-1 btn btn-primary">Купить</a>
     {% with dict=cart.cart %}
     <table class="bucket-table">
         <thead>
@@ -32,7 +32,7 @@
                 <td>
                   <form action="{% url 'cart:cart_add' item.product_type product.id %}" method="post">
                       {% csrf_token %}
-                      <input type="number" name="quantity" id="id_quantity" class="form-control">
+                      <input type="number" name="quantity" id="id_quantity" value="{{item.quantity}}" class="form-control">
                       <input type="submit" value="Изменить" class="btn btn-secondary">
                   </form>
                 </td>
@@ -40,7 +40,7 @@
                 <td class="num">{{ item.price }} ₽ * {{ item.quantity }} = {{ item.total_price }} ₽</td>
               </tr>
             {% endwith %}
-        </tr>
+        </tbody>
         {% endfor %}
     </table>
     {% endwith %}

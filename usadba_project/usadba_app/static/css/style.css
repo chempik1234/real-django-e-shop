@@ -142,11 +142,11 @@ body {
     content: counter(li,decimal-leading-zero);
     display: table-cell;
     padding-right: 30px;
-    font-size: 50px;
+    font-size: 30px;
     line-height: 0;
     color: lightgray;
     position: relative;
-    top: 50px;
+    top: 7px;
     font-weight: 600;
 }
 .num-list__item:after {
@@ -159,7 +159,7 @@ body {
     border: 5px solid #e7ecf3;
     position: absolute;
     top: 50px;
-    left: 70px;
+    left: 40px;
 }
 .num-list {
     position: relative;
@@ -171,7 +171,7 @@ body {
 .num-list:before {
     content: "";
     position: absolute;
-    left: 80px;
+    left: 50px;
     width: 2px;
     height: 100%;
     background: #e7ecf3;
@@ -240,7 +240,7 @@ body {
 .round-border-padding {
     border: 1px solid green;
     border-radius: 10px;
-    margin: 20px;
+    margin-top: 20px;
     padding: 20px;
     background-color: white;
 }
@@ -315,7 +315,7 @@ body {
     box-shadow: 0 0 5px rgba(0,0,0,1);
     background: #f0fff0;
     border-radius: 5px;
-    display: grid;
+    /* display: grid; */
     /*height: 100%;
     width: 100%;*/
 }

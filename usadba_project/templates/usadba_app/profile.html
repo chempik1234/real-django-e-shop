@@ -12,27 +12,27 @@
         </div>
     </div>
     {% if orders %}
-    <section class="w-100 margin-top-50 round-border-padding min-width-300 bg-secondary">
+    <section class="w-100 margin-top-50 ml-md-2 mr-md-2 round-border-padding min-width-300 bg-secondary">
         <div class="div-margin-minus-50">
             <h4>Заказы</h4>
         </div>
         {% for i in orders %}
         <section class="shadow round-border-padding">
             {% if i.has_been_paid %}
-            <h1 class="green-neon-text">&#10004; Заказ оплачен</h1>
+            <h3 class="green-neon-text">&#10004; Заказ оплачен</h3>
             {% else %}
-            <h1 class="red-neon-text">&#10006; Заказ не оплачен</h1>
+            <h3 class="red-neon-text">&#10060; Заказ не оплачен</h3>
             {% endif %}
-            <h3 class="text-success">Цена: <strong>{{i.price}} ₽</strong></h3>
-            <h4 class="text-primary">{{i.datetime}}</h4>
-            <ul class="num-list">
+            <p class="text-success">Цена: <strong>{{i.price}} ₽</strong></p>
+            <p class="text-primary">{{i.datetime}}</p>
+            <ul class="list-group">
                 {% for product in i.products %}
-                <li class="reveal fade-left num-list__item">
-                    <img class="max-width-100 border" src="{{product.product.image.url}}">
-                    <h4 class="text-primary">{{product.product.title}}</h4>
-                    <p class="form-control">{{product.price}} ₽</p>
-                    <h4 class="text-primary">Количество</h4>
-                    <p class="form-control text-secondary">{{product.quantity}}</p>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <!--<img class="max-width-100 border" src="{{product.product.image.url}}">-->
+                    <strong>{{product.product.title}}</strong>
+                    <span>{{product.price}} ₽</span>
+                    <strong>Количество</strong>
+                    <span class="badge badge-primary badge-pill">{{product.quantity}}</span>
                 </li>
                 {% endfor %}
             </ul>

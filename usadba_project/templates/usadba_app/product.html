@@ -3,7 +3,7 @@
 {% block content %}
 <div class="product product-page-product">
     <h1>{{title}}</h1>
-    <div class="wrapper container">
+    <div class="d-md-flex">
         <img class="product-page-img" src="{{img_url}}">
         <div class="inner-padding">
             <!------------------------------------------------------->
@@ -51,15 +51,13 @@
             <div>
                 <form method="post" action="/cart/add/{{product_type}}/{{id}}/">
                     {% csrf_token %}
-                    <input type="number" name="quantity" id="id_quantity" class="form-control">
+                    <input type="number" name="quantity" id="id_quantity" value="1" class="form-control">
                     <input type="submit" value="В корзину" class="btn btn-secondary">
                 </form>
             </div>
             <!------------------------------------------------------->
-            <div>
-                <h4 style="margin-top: 20px;">{{price}} ₽</h4>
-                <a href="/product/buy/{{product_type}}/{{title}}" class="btn btn-warning">Купить</a>
-            </div>
+            <h4 style="margin-top: 20px;">{{price}} ₽</h4>
+            <!--<a href="/product/buy/{{product_type}}/{{title}}" class="btn btn-warning">Купить</a>-->
         </div>
     </div>
     <h2>Описание:</h2>
@@ -69,8 +67,8 @@
         {% for key, value in item %}
         {% if value != "" and value != None %}
         <tr>
-            <td style="color: gray;"><h4>{{key}}:</h4></td>
-            <td><h4>{{value}}</h4></td>
+            <td class="text-secondary"><p>{{key}}:</p></td>
+            <td><p>{{value}}</p></td>
         </tr>
         {% endif %}
         {% endfor %}
@@ -95,7 +93,7 @@
         {% if item.2 != '' and item.2 != None %}
         <img class="opinion_img" src="{{item.2.url}}" alt="Нет фото">
         {% else %}
-        <h3>Нет фото</h3>
+        <h4 class="text-secondary">Нет фото</h4>
         {% endif %}
         {% if item.3 > 0 %}
         <div class="rating-result">
