@@ -27,7 +27,7 @@
                 {% if order.has_been_paid %}
                 <h3 class="green-neon-text">&#10004; Заказ оплачен</h3>
                 {% else %}
-                <h3 class="red-neon-text">&#10006; Заказ не оплачен</h3>
+                <h3 class="red-neon-text">&#10060; Заказ не оплачен</h3>
                 {% endif %}
                 <p class="text-success">Цена: <strong>{{order.price}} ₽</strong></p>
                 <p class="text-primary">{{order.datetime}}</p>
