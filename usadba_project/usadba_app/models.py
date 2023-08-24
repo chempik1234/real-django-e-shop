@@ -54,6 +54,8 @@ class Opinion(models.Model):
     proven = models.BooleanField(null=False, default=False)
 
     class Meta:
+        verbose_name = "Отзыв"
+        verbose_name_plural = "Отзывы"
         db_table = "opinion"
 
 
@@ -80,6 +82,8 @@ class Rates(models.Model):
     pr_id = models.IntegerField(null=True)
 
     class Meta:
+        verbose_name = "Оценка"
+        verbose_name_plural = "Оценки"
         db_table = "rates"
 
 
@@ -110,6 +114,8 @@ class Orders(models.Model):
         super().clean()
 
     class Meta:
+        verbose_name = "Заказ"
+        verbose_name_plural = "Заказы"
         db_table = "orders"
 
 
@@ -128,6 +134,8 @@ class SeedsCategories(models.Model):
     name = models.CharField(null=False, max_length=50)
 
     class Meta:
+        verbose_name = "Категория семян (F1, F2...)"
+        verbose_name_plural = "Категории семян (F1, F2...)"
         db_table = "seed_categories"
 
 
@@ -135,6 +143,8 @@ class RipeningPeriods(models.Model):
     name = models.CharField(null=False, max_length=50)
 
     class Meta:
+        verbose_name = "Период созревания (поздний, ..., ранний)"
+        verbose_name_plural = "Периоды созревания (поздний, ..., ранний)"
         db_table = "ripening_periods"
 
 
@@ -142,6 +152,8 @@ class GroundType(models.Model):
     name = models.CharField(null=False, max_length=8)  # закрытый открытый
 
     class Meta:
+        verbose_name = "Тип грунта (открытый/закрытый)"
+        verbose_name_plural = "Типы грунта (открытый/закрытый)"
         db_table = "ground_type"
 
 
@@ -165,6 +177,8 @@ class TomatoTypeOfPlant(models.Model):
     name = models.CharField(null=False, max_length=19)  # детерминантный, супер-, ин-, полу-
 
     class Meta:
+        verbose_name = "Тип растения (ин-, полу-, супер- детерминантный)"
+        verbose_name_plural = "Типы растения (ин-, полу-, супер- детерминантный)"
         db_table = "tomato_type_of_plant"
 
 
