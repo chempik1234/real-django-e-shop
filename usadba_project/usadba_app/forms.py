@@ -11,7 +11,7 @@ class OpinionForm(forms.Form):
     # field_order = ["age", "name", "email", "ads"]
 
 
-class DBLoginForm(UserCreationForm):
+class SignInForm(UserCreationForm):
     #username = forms.CharField(label="Никнейм", required=True, max_length=150)
     surname = forms.CharField(label="Фамилия", required=True, max_length=150)
     name = forms.CharField(label="Имя", required=True, max_length=150)
@@ -39,7 +39,7 @@ class DBLoginForm(UserCreationForm):
         fields = ("username", "surname", "name", "email",)
 
     def save(self, commit=True):
-        user = super(DBLoginForm, self).save(commit=False)
+        user = super(SignInForm, self).save(commit=False)
         user.first_name = self.cleaned_data["name"]
         user.last_name = self.cleaned_data["surname"]
         user.email = self.cleaned_data["email"]
@@ -49,7 +49,7 @@ class DBLoginForm(UserCreationForm):
         return user
 
 
-class SignInForm(forms.Form):
+class LogInForm(forms.Form):
     email = forms.EmailField(label='Почта', required=True, max_length=254)
     password = forms.CharField(label='Пароль', required=True, widget=forms.PasswordInput, max_length=128)
     # remember_me = forms.BooleanField(label='Запомнить меня', required=False)
@@ -57,12 +57,14 @@ class SignInForm(forms.Form):
     def clean_email(self):
         email = self.cleaned_data['email']
         if not User.objects.filter(email=email).exists():
-            raise forms.ValidationError("Пользователя с такой почтой нет")
+            raise forms.ValidationError("Пользователя с такой почтой нет!")
         return email
 
     def clean_password(self):
-        email = self.cleaned_data['email']
+        email = self.cleaned_data.get('email')
+        if not email:
+            raise forms.ValidationError("Email не прошёл проверку!")
         password = self.cleaned_data['password']
         if not User.objects.filter(email=email,password=password).exists():
-            raise forms.ValidationError("Неправильный пароль")
+            raise forms.ValidationError("Неправильный пароль!")
         return password

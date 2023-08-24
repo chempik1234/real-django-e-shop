@@ -422,7 +422,7 @@ def product_buy(request, product_table, id):
 
 def register(request):
     if request.method == 'POST':
-        post = DBLoginForm(request.POST)
+        post = SignInForm(request.POST)
         if post.is_valid():
             post.save()
             #post.clean()
@@ -444,7 +444,7 @@ def register(request):
         else:
             form = post
     else:
-        form = DBLoginForm()
+        form = SignInForm()
     data_context = DEFAULT_CONTEXT.copy()
     data_context["title"] = "Регистрация"
     data_context["main_title"] = "Регистрация"
@@ -453,9 +453,9 @@ def register(request):
 
 
 def log_in(request):
-    form = SignInForm()
+    form = LogInForm()
     if request.method == 'POST':
-        post = SignInForm(request.POST)
+        post = LogInForm(request.POST)
         if post.is_valid():
             post.clean()
             email = post.cleaned_data.get('email')
