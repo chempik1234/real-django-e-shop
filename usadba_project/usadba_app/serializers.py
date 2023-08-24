@@ -10,6 +10,7 @@ class SeedsCategoriesSerializer(serializers.HyperlinkedModelSerializer):
         model = SeedsCategories
         fields = ['name']
         lookup_field = 'name'
+        model_field = "name"
 
 
 class RipeningPeriodsSerializer(serializers.HyperlinkedModelSerializer):

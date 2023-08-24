@@ -47,11 +47,11 @@ def create_random_string():
 
 class Opinion(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-    text = models.CharField(null=True,max_length=1200)
-    image = models.ImageField(null=True, blank=True, upload_to='opinion')
+    text = models.CharField(null=True,max_length=1200, verbose_name="Текст")
+    image = models.ImageField(null=True, blank=True, upload_to='opinion', verbose_name="Изображение")
     pr_table = models.CharField(null=True,max_length=255)  # tomato_seeds
     pr_id = models.IntegerField(null=True)
-    proven = models.BooleanField(null=False, default=False)
+    proven = models.BooleanField(null=False, default=False, verbose_name="Доказан")
 
     class Meta:
         verbose_name = "Отзыв"
@@ -60,11 +60,11 @@ class Opinion(models.Model):
 
 
 class Product(models.Model):
-    title = models.CharField(null=False, max_length=255, default="DEFAULT NAME12345")
+    title = models.CharField(null=False, max_length=255, default="DEFAULT NAME12345", verbose_name="Название")
     image = None #models.ImageField(upload_to=os.path.join(os.curdir, '../static/img/product_img'))
-    description = models.CharField(null=True, max_length=500)
-    price = models.IntegerField(null=False, default=1, validators=[MinValueValidator(1)])
-    company = models.CharField(null=True, max_length=50)
+    description = models.CharField(null=True, max_length=500, verbose_name="Описание")
+    price = models.IntegerField(null=False, default=1, validators=[MinValueValidator(1)], verbose_name="Цена")
+    company = models.CharField(null=True, max_length=50, verbose_name="Компания")
 
     class Meta:
         verbose_name = 'Товар'
@@ -77,7 +77,8 @@ class Product(models.Model):
 
 class Rates(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    rate = models.IntegerField(null=False, default=1, validators=[MaxValueValidator(5), MinValueValidator(1)])
+    rate = models.IntegerField(null=False, default=1, validators=[MaxValueValidator(5), MinValueValidator(1)],
+                               verbose_name="Оценка")
     pr_table = models.CharField(null=True,max_length=255)  # tomato_seeds
     pr_id = models.IntegerField(null=True)
 
@@ -131,40 +132,50 @@ class OrderToProduct(models.Model):
 
 ### СЕМЕНА
 class SeedsCategories(models.Model):
-    name = models.CharField(null=False, max_length=50)
+    name = models.CharField(null=False, max_length=50, verbose_name="Название")
 
     class Meta:
         verbose_name = "Категория семян (F1, F2...)"
         verbose_name_plural = "Категории семян (F1, F2...)"
         db_table = "seed_categories"
 
+    def __str__(self):
+        return self.name
+
 
 class RipeningPeriods(models.Model):
-    name = models.CharField(null=False, max_length=50)
+    name = models.CharField(null=False, max_length=50, verbose_name="Название")
 
     class Meta:
         verbose_name = "Период созревания (поздний, ..., ранний)"
         verbose_name_plural = "Периоды созревания (поздний, ..., ранний)"
         db_table = "ripening_periods"
 
+    def __str__(self):
+        return self.name
+
 
 class GroundType(models.Model):
-    name = models.CharField(null=False, max_length=8)  # закрытый открытый
+    name = models.CharField(null=False, max_length=8, verbose_name="Название")  # закрытый открытый
 
     class Meta:
         verbose_name = "Тип грунта (открытый/закрытый)"
         verbose_name_plural = "Типы грунта (открытый/закрытый)"
         db_table = "ground_type"
 
+    def __str__(self):
+        return self.name
+
 
 class SimpleSeeds(models.Model):
-    category = models.ForeignKey(SeedsCategories, on_delete=models.CASCADE, default=1)
-    ripening_period = models.ForeignKey(RipeningPeriods, on_delete=models.CASCADE, default=1)
-    ripe_color = models.CharField(null=True, max_length=30)
-    ripe_form = models.CharField(null=True, max_length=50)
-    ripe_weight_grams = models.IntegerField(null=True)
-    yield_kg_div_m2 = models.CharField(null=True, max_length=15)
-    ground_growing_conditions = models.ForeignKey(GroundType, on_delete=models.CASCADE)
+    category = models.ForeignKey(SeedsCategories, on_delete=models.CASCADE, default=1, verbose_name="Категория")
+    ripening_period = models.ForeignKey(RipeningPeriods, on_delete=models.CASCADE, default=1,
+                                        verbose_name="Период созревания")
+    ripe_color = models.CharField(null=True, max_length=30, verbose_name="Цвет плода")
+    ripe_form = models.CharField(null=True, max_length=50, verbose_name="Форма плода")
+    ripe_weight_grams = models.IntegerField(null=True, verbose_name="Вес плода (граммы)")
+    yield_kg_div_m2 = models.CharField(null=True, max_length=15, verbose_name="Урожайность кг/м2")
+    ground_growing_conditions = models.ForeignKey(GroundType, on_delete=models.CASCADE, verbose_name="Тип грунта")
 
     class Meta:
         abstract = True
@@ -174,17 +185,20 @@ class SimpleSeeds(models.Model):
 
 
 class TomatoTypeOfPlant(models.Model):
-    name = models.CharField(null=False, max_length=19)  # детерминантный, супер-, ин-, полу-
+    name = models.CharField(null=False, max_length=19, verbose_name="Название")  # детерминантный, супер-, ин-, полу-
 
     class Meta:
         verbose_name = "Тип растения (ин-, полу-, супер- детерминантный)"
         verbose_name_plural = "Типы растения (ин-, полу-, супер- детерминантный)"
         db_table = "tomato_type_of_plant"
 
+    def __str__(self):
+        return self.name
+
 
 class TomatoSeeds(Product, SimpleSeeds):
-    image = models.ImageField(blank=True, upload_to='product_img/TomatoSeeds', null=True)
-    type_of_plant = models.ForeignKey(TomatoTypeOfPlant, on_delete=models.CASCADE)
+    image = models.ImageField(blank=True, upload_to='product_img/TomatoSeeds', null=True, verbose_name="Изображение")
+    type_of_plant = models.ForeignKey(TomatoTypeOfPlant, on_delete=models.CASCADE, verbose_name="Тип растения")
 
     class Meta:
         verbose_name = "Упаковка семян помидоров"
@@ -194,7 +208,7 @@ class TomatoSeeds(Product, SimpleSeeds):
 
 ### ОГУРЦЫ
 class CucumberSeeds(Product, SimpleSeeds):
-    image = models.ImageField(blank=True, upload_to='product_img/CucumberSeeds', null=True)
+    image = models.ImageField(blank=True, upload_to='product_img/CucumberSeeds', null=True, verbose_name="Изображение")
 
     class Meta:
         verbose_name = "Упаковка семян огурцов"
